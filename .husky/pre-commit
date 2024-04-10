@@ -1,0 +1,2 @@
+npx eslint src/** --ignore-pattern "src/**.css" --fix 
+pnpm build
