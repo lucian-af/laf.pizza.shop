@@ -19,14 +19,13 @@ export function SignIn() {
     formState: { isSubmitting },
   } = useForm<SignInForm>()
 
-  async function handleSignin(data: SignInForm) {
-    console.log(data)
+  async function handleSignIn(data: SignInForm) {
     await new Promise((resolve) => setTimeout(resolve, 2000))
 
     toast.success('Enviamos um link de acesso para o seu e-mail.', {
       action: {
         label: 'Reenviar',
-        onClick: () => handleSignin(data),
+        onClick: () => handleSignIn(data),
       },
     })
   }
@@ -47,7 +46,7 @@ export function SignIn() {
 
           <form
             className="space-y-4 px-4"
-            onSubmit={handleSubmit(handleSignin)}
+            onSubmit={handleSubmit(handleSignIn)}
           >
             <div className="space-y-2">
               <Label htmlFor="email">Seu e-mail</Label>
