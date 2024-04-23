@@ -1,15 +1,15 @@
-import { Button } from '@components/ui/button'
-import { Input } from '@components/ui/input'
+import { Pagination } from '@components/pagination'
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from '@components/ui/table'
-import { ArrowRight, Search, X } from 'lucide-react'
 import { Helmet } from 'react-helmet-async'
+
+import { OrderTableFilters } from './order-table-filters'
+import { OrderTableRow } from './order-table-row'
 
 type TableHeaderConfig = {
   headers: Array<{
@@ -37,74 +37,34 @@ export function Orders() {
       <Helmet title="Pedidos" />
       <div className="flex flex-col gap-4">
         <h1 className="text-3xl font-bold tracking-tight">Pedidos</h1>
-      </div>
-      <div className="space-y-2.5">
-        <form className="flex items-center gap-2">
-          <span className="text-sm font-semibold">Filtros:</span>
-          <Input placeholder="Nome do cliente" className="h-8 w-[320px]" />
-        </form>
+        <div className="space-y-2.5">
+          <OrderTableFilters />
 
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                {tableHeaderConfig.headers.map((header) => {
-                  return (
-                    <TableHead
-                      key={header.description}
-                      className={header.width ? `w-[${header.width}px]` : ''}
-                    >
-                      {header.description}
-                    </TableHead>
-                  )
-                })}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {Array.from({ length: 15 }).map((_, i) => {
-                return (
-                  <TableRow key={i}>
-                    <TableCell>
-                      <Button variant="outline" size="xs">
-                        <Search className="h-3 w-3" />
-                        <span className="sr-only">Detalhes do pedido</span>
-                      </Button>
-                    </TableCell>
-                    <TableCell className="font-mono text-xs font-medium">
-                      765dfabe-1797-4548-9e07-b4cb5d5f5a8b
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      há 15 minutos
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <span className="h-2 w-2 rounded-full bg-slate-400" />
-                        <span className="font-medium text-muted-foreground">
-                          Pendente
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="font-medium">
-                      Lucian Alves Ferreira
-                    </TableCell>
-                    <TableCell className="font-medium">R$ 47.690,00</TableCell>
-                    <TableCell>
-                      <Button variant="outline" size="xs">
-                        <ArrowRight className="mr-2 h-3 w-3" />
-                        Aprovar
-                      </Button>
-                    </TableCell>
-                    <TableCell>
-                      <Button variant="ghost" size="xs">
-                        <X className="mr-2 h-3 w-3" />
-                        Cancelar
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                )
-              })}
-            </TableBody>
-          </Table>
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  {tableHeaderConfig.headers.map((header) => {
+                    return (
+                      <TableHead
+                        key={header.description}
+                        className={header.width ? `w-[${header.width}px]` : ''}
+                      >
+                        {header.description}
+                      </TableHead>
+                    )
+                  })}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {Array.from({ length: 15 }).map((_, i) => (
+                  <OrderTableRow key={i} />
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+
+          <Pagination totalCount={105} pageIndex={0} perPage={10} />
         </div>
       </div>
     </>
