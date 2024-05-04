@@ -1,4 +1,5 @@
-﻿using PizzaShop.API.Domain.Exceptions;
+﻿using PizzaShop.API.Domain.Enums;
+using PizzaShop.API.Domain.Exceptions;
 
 namespace PizzaShop.API.Domain
 {
@@ -10,23 +11,28 @@ namespace PizzaShop.API.Domain
 
 		public string Name { get; }
 		public string Description { get; }
-		public Guid? ManagerId { get; }
+		public Guid? ManagerId { get; private set; }
 
-		public User Manager { get; }
+		public User Manager { get; private set; }
 
-		public Restaurant(string name, string description, User manager)
+		public Restaurant(string name, string description, string managerName, string email, string phone)
 		{
 			Name = name;
 			Description = description;
-			ManagerId = ValidManagerRole(manager);
+			Manager = new User(managerName, email, phone, RoleUser.Manager);
+			ManagerId = Manager.Id;
 		}
 
-		private static Guid? ValidManagerRole(User manager)
+		public void ChangeManager(User newManager)
 		{
-			if (manager is not null && manager.Role != Enums.RoleUser.Manager)
+			if (newManager is null)
+				throw new DomainException("User is required.");
+
+			if (newManager.Role != Enums.RoleUser.Manager)
 				throw new DomainException("User role type not allowed.");
 
-			return manager?.Id;
+			Manager = newManager;
+			ManagerId = newManager.Id;
 		}
 	}
 }

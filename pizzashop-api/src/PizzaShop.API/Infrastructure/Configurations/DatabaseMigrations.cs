@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using PizzaShop.API.Domain;
-using PizzaShop.API.Domain.Enums;
 using PizzaShop.API.Infrastructure.Context;
 using PizzaShop.API.Settings;
 
@@ -31,12 +30,12 @@ namespace PizzaShop.API.Infrastructure.Configurations
 			Console.ForegroundColor = ConsoleColor.DarkYellow;
 			Console.WriteLine($"[Mode:{configs.Value.Mode}] - Database reset...");
 
-			var (users, restaurants) = DataFake.Generate();
+			var restaurant = DataFake.Generate();
 			Console.ForegroundColor = ConsoleColor.DarkYellow;
 			Console.WriteLine($"[Mode:{configs.Value.Mode}] - Generating data...");
 
-			pizzaShopContext.Users.AddRange(users);
-			pizzaShopContext.Restaurants.AddRange(restaurants);
+			pizzaShopContext.Users.Add(restaurant.Manager);
+			pizzaShopContext.Restaurants.Add(restaurant);
 			pizzaShopContext.Commit().Wait();
 
 			Console.ForegroundColor = ConsoleColor.DarkGreen;
@@ -46,12 +45,18 @@ namespace PizzaShop.API.Infrastructure.Configurations
 
 	public static class DataFake
 	{
-		public static (User, Restaurant) Generate()
+		public static Restaurant Generate()
 		{
 			var faker = new Faker("pt_BR");
-			var user = new User(faker.Person.FullName, "admin@admin.com", faker.Person.Phone, RoleUser.Manager);
-			var restaurant = new Restaurant(faker.Company.CompanyName(), faker.Company.CatchPhrase(), user.Role == RoleUser.Manager ? user : null);
-			return (user, restaurant);
+
+			var restaurant = new Restaurant(
+				 faker.Company.CompanyName(),
+				   faker.Company.CatchPhrase(),
+				   faker.Person.FullName,
+					 "admin@admin.com",
+					 faker.Person.Phone);
+
+			return restaurant;
 		}
 	}
 }
