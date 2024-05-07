@@ -1,21 +1,22 @@
-﻿using PizzaShop.API.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using PizzaShop.API.Domain.Entities;
 using PizzaShop.API.Domain.Interfaces;
 using PizzaShop.API.Infrastructure.Context;
 using PizzaShop.API.Infrastructure.Data;
 
 namespace PizzaShop.API.Infrastructure.Repositories
 {
-	public class RestaurantRepository(PizzaShopContext context) : IRestaurantRepository
+	public class AuthLinkRepository(PizzaShopContext context) : IAuthLinkRepository
 	{
 		private readonly PizzaShopContext _context = context;
 
 		public IUnitOfWork UnitOfWork => _context;
 
-		public void AddResturant(Restaurant restaurant)
-		{
-			_context.Users.Add(restaurant.Manager);
-			_context.Restaurants.Add(restaurant);
-		}
+		public User GetUserFromEmail(string email)
+			=> _context.Users.AsNoTracking().SingleOrDefault(s => s.Email.Equals(email.ToLower()));
+
+		public void AddAuthLink(AuthLink authLink)
+			=> _context.AuthLinks.Add(authLink);
 
 		#region Disposible
 
@@ -28,7 +29,7 @@ namespace PizzaShop.API.Infrastructure.Repositories
 		protected virtual void Dispose(bool disposing)
 			=> _context.Dispose();
 
-		~RestaurantRepository()
+		~AuthLinkRepository()
 			=> Dispose(false);
 
 		#endregion Disposible

@@ -1,5 +1,5 @@
 using Bogus;
-using PizzaShop.API.Domain;
+using PizzaShop.API.Domain.Entities;
 using PizzaShop.API.Domain.Enums;
 using PizzaShop.API.Domain.Exceptions;
 

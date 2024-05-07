@@ -1,7 +1,11 @@
 ﻿using Asp.Versioning;
 using Microsoft.Extensions.Options;
+using PizzaShop.API.Domain.Interfaces;
+using PizzaShop.API.Domain.Services;
 using PizzaShop.API.Infrastructure.Configurations;
 using PizzaShop.API.Settings;
+using PizzaShop.API.Smtp.Adapters;
+using PizzaShop.API.Smtp.Builders;
 using PizzaShop.API.UseCases;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -18,6 +22,7 @@ namespace PizzaShop.API.Configurations
 			services.AddSwaggerGen();
 			services.AddDatabaseConfiguration(configuration.GetConnectionString("PizzaShop"));
 			services.Configure<PizzaShopConfigs>(configuration.GetSection(nameof(PizzaShopConfigs)));
+			services.Configure<MailSettings>(configuration.GetSection(nameof(MailSettings)));
 			services.AddDependencyInjections();
 			services.AddVersioning();
 			services.AddCors();
@@ -29,6 +34,10 @@ namespace PizzaShop.API.Configurations
 		{
 			services.AddTransient<IConfigureOptions<SwaggerGenOptions>, SwaggerOptionsConfiguration>();
 			services.AddScoped<AddRestaurant>();
+			services.AddScoped<AuthenticateUser>();
+			services.AddScoped<IGenerateCode, GenerateUuid>();
+			services.AddScoped<IMailAdapter, MailAdapter>();
+			services.AddScoped<IMailBuilder, MailBuilder>();
 
 			return services;
 		}

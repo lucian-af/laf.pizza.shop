@@ -1,9 +1,9 @@
 ﻿using PizzaShop.API.Domain.Enums;
 using PizzaShop.API.Domain.Exceptions;
 
-namespace PizzaShop.API.Domain
+namespace PizzaShop.API.Domain.Entities
 {
-	public partial class User : Auditable
+	public class User : Auditable
 	{
 		public string Name { get; }
 		public string Email { get; private set; }

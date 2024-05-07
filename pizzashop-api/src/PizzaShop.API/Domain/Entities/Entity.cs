@@ -1,4 +1,4 @@
-﻿namespace PizzaShop.API.Domain
+﻿namespace PizzaShop.API.Domain.Entities
 {
 	public abstract class Entity
 	{

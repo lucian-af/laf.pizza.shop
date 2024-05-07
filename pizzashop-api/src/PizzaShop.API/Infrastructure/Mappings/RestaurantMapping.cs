@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PizzaShop.API.Domain;
+using PizzaShop.API.Domain.Entities;
 using PizzaShop.API.Infrastructure.Extensions;
 
 namespace PizzaShop.API.Infrastructure.Mappings
@@ -20,15 +20,15 @@ namespace PizzaShop.API.Infrastructure.Mappings
 
 			builder
 				.Property(u => u.Name)
+				.HasColumnName("name")
 				.HasColumnType("text")
-				.IsRequired()
-				.HasColumnName("name");
+				.IsRequired();
 
 			builder
 				.Property(u => u.Description)
+				.HasColumnName("description")
 				.HasColumnType("text")
-				.IsRequired(false)
-				.HasColumnName("description");
+				.IsRequired(false);
 
 			builder
 				.Property(u => u.ManagerId)

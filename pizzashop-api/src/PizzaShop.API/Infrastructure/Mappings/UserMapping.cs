@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Globalization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using PizzaShop.API.Domain;
+using PizzaShop.API.Domain.Entities;
 using PizzaShop.API.Domain.Enums;
 using PizzaShop.API.Infrastructure.Extensions;
 
@@ -24,15 +25,15 @@ namespace PizzaShop.API.Infrastructure.Mappings
 
 			builder
 				.Property(u => u.Name)
+				.HasColumnName("name")
 				.HasColumnType("text")
-				.IsRequired()
-				.HasColumnName("name");
+				.IsRequired();
 
 			builder
 				.Property(u => u.Email)
+				.HasColumnName("email")
 				.HasColumnType("text")
-				.IsRequired()
-				.HasColumnName("email");
+				.IsRequired();
 
 			builder
 				.HasIndex(u => u.Email)
@@ -40,15 +41,15 @@ namespace PizzaShop.API.Infrastructure.Mappings
 
 			builder
 				.Property(u => u.Phone)
+				.HasColumnName("phone")
 				.HasColumnType("text")
-				.IsRequired(false)
-				.HasColumnName("phone");
+				.IsRequired(false);
 
 			builder
 				.Property(u => u.Role)
+				.HasColumnName("role")
 				.HasColumnType("text")
 				.IsRequired()
-				.HasColumnName("role")
 				.HasConversion(EnumConverter.EnumToStringConverter<RoleUser>());
 		}
 	}
@@ -58,6 +59,6 @@ namespace PizzaShop.API.Infrastructure.Mappings
 		public static ValueConverter EnumToStringConverter<T>()
 			=> new ValueConverter<T, string>(
 				enumTo => enumTo.ToString().ToLower(),
-				enumFrom => (T)Enum.Parse(typeof(T), enumFrom));
+				enumFrom => (T)Enum.Parse(typeof(T), CultureInfo.CurrentCulture.TextInfo.ToTitleCase(enumFrom)));
 	}
 }

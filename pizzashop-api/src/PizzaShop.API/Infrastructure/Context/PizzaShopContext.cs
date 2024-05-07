@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using PizzaShop.API.Domain;
+using PizzaShop.API.Domain.Entities;
 using PizzaShop.API.Infrastructure.Data;
 
 namespace PizzaShop.API.Infrastructure.Context
@@ -9,6 +9,7 @@ namespace PizzaShop.API.Infrastructure.Context
 	{
 		public DbSet<User> Users { get; set; }
 		public DbSet<Restaurant> Restaurants { get; set; }
+		public DbSet<AuthLink> AuthLinks { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

@@ -1,4 +1,4 @@
-﻿using PizzaShop.API.Domain;
+﻿using PizzaShop.API.Domain.Entities;
 using PizzaShop.API.Domain.Interfaces;
 using PizzaShop.API.Domain.Models;
 
@@ -18,10 +18,10 @@ namespace PizzaShop.API.UseCases
 					  data.Phone);
 
 			_restaurantRepository.AddResturant(restaurant);
-			var sucess = await _restaurantRepository.UnitOfWork.Commit();
+			var success = await _restaurantRepository.UnitOfWork.Commit();
 
-			if (!sucess)
-				throw new Exception("Falha ao cadastrar restaurante.");
+			if (!success)
+				throw new Exception("Error on add restaurant.");
 		}
 	}
 }

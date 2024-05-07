@@ -1,9 +1,10 @@
 ﻿using PizzaShop.API.Domain.Enums;
 using PizzaShop.API.Domain.Exceptions;
+using PizzaShop.API.Domain.Interfaces;
 
-namespace PizzaShop.API.Domain
+namespace PizzaShop.API.Domain.Entities
 {
-	public sealed class Restaurant : Auditable
+	public sealed class Restaurant : Auditable, IAggregateRoot
 	{
 		// EF Core
 		private Restaurant()
@@ -28,7 +29,7 @@ namespace PizzaShop.API.Domain
 			if (newManager is null)
 				throw new DomainException("User is required.");
 
-			if (newManager.Role != Enums.RoleUser.Manager)
+			if (newManager.Role != RoleUser.Manager)
 				throw new DomainException("User role type not allowed.");
 
 			Manager = newManager;

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PizzaShop.API.Domain;
+using PizzaShop.API.Domain.Entities;
 
 namespace PizzaShop.API.Infrastructure.Extensions
 {
