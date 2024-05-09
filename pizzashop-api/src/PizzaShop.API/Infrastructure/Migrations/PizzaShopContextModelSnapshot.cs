@@ -53,8 +53,7 @@ namespace PizzaShop.API.Infrastructure.Migrations
                     b.HasIndex("Code")
                         .IsUnique();
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("authLinks", (string)null);
                 });
@@ -146,10 +145,11 @@ namespace PizzaShop.API.Infrastructure.Migrations
             modelBuilder.Entity("PizzaShop.API.Domain.Entities.AuthLink", b =>
                 {
                     b.HasOne("PizzaShop.API.Domain.Entities.User", "User")
-                        .WithOne()
-                        .HasForeignKey("PizzaShop.API.Domain.Entities.AuthLink", "UserId")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("authLink_user");
 
                     b.Navigation("User");
                 });

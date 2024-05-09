@@ -36,10 +36,11 @@ namespace PizzaShop.API.Infrastructure.Mappings
 
 			builder
 				.HasOne(al => al.User)
-				.WithOne()
-				.HasForeignKey<AuthLink>(al => al.UserId)
+				.WithMany()
+				.HasForeignKey(al => al.UserId)
 				.OnDelete(DeleteBehavior.Cascade)
-				.IsRequired();
+				.IsRequired()
+				.HasConstraintName("authLink_user");
 		}
 	}
 }

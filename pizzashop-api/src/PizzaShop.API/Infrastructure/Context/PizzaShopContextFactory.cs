@@ -9,7 +9,7 @@ namespace PizzaShop.API.Infrastructure.Context
 		{
 			var configuration = new ConfigurationBuilder()
 					.SetBasePath(Directory.GetCurrentDirectory())
-					.AddJsonFile("appsettings.json")
+					.AddJsonFile("appsettings.Development.json")
 					.Build();
 
 			var optionsBuilder = new DbContextOptionsBuilder<PizzaShopContext>();
