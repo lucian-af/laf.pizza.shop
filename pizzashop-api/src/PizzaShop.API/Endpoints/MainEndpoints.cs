@@ -13,7 +13,9 @@ namespace PizzaShop.API.Endpoints
 				.ReportApiVersions()
 				.Build();
 
-			return app.MapGroup("api/v{apiVersion:apiVersion}").WithApiVersionSet(apiVersion);
+			return app.MapGroup("api/v{apiVersion:apiVersion}")
+					  .WithApiVersionSet(apiVersion)
+					  .RequireAuthorization();
 		}
 	}
 }

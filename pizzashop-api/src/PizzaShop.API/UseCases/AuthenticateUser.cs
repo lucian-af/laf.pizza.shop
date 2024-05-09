@@ -35,8 +35,9 @@ namespace PizzaShop.API.UseCases
 			if (!success)
 				throw new Exception("Error on generate authentication.");
 
-			var authLink = $"{_pizzaShopConfigs.BaseUrl}/auth-links/authenticate?code={authLinkCode}&redirect={_pizzaShopConfigs.AuthRedirectUrl}";
+			var authLink = $"{_pizzaShopConfigs.BaseUrl}/authenticate/auth-links?code={authLinkCode}&redirect={_pizzaShopConfigs.AuthRedirectUrl}";
 
+			// TODO: refactor
 			_mailAdapter.SendMail(new EmailMessage
 			{
 				Title = $"Hello, {userFromEmail.Name}, authenticate to Pizza Shop",

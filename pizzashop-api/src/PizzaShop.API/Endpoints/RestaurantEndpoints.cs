@@ -5,7 +5,7 @@ namespace PizzaShop.API.Endpoints
 {
 	public static class RestaurantEndpoints
 	{
-		public static IEndpointRouteBuilder MapRestaurantEndpoints(this IEndpointRouteBuilder app)
+		public static IEndpointRouteBuilder UseRestaurantEndpoints(this IEndpointRouteBuilder app)
 		{
 			var groupBuilder = MainEndpoints.GetRouteGroupBuilder(app);
 

@@ -2,7 +2,7 @@
 {
 	public static class UserEndpoints
 	{
-		public static IEndpointRouteBuilder MapUserEndpoints(this IEndpointRouteBuilder app)
+		public static IEndpointRouteBuilder UseUserEndpoints(this IEndpointRouteBuilder app)
 		{
 			var groupBuilder = MainEndpoints.GetRouteGroupBuilder(app);
 

@@ -12,19 +12,20 @@ namespace PizzaShop.API.Configurations
 			var pizzaShopConfigs = app.Services.GetRequiredService<IOptions<PizzaShopConfigs>>();
 			app.RunMigrations(pizzaShopConfigs);
 			app.MapAllEndpoints();
-			app.AddSwaggerCustom();
+			app.UseSwaggerCustom();
 			app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 			return app;
 		}
 
 		private static void MapAllEndpoints(this WebApplication app)
 		{
-			app.MapRestaurantEndpoints();
-			app.MapUserEndpoints();
-			app.MapAuthenticationEndpoints();
+			app.UseRestaurantEndpoints();
+			app.UseUserEndpoints();
+			app.UseAuthenticationEndpoints();
+			app.UseAuthentication();
 		}
 
-		private static void AddSwaggerCustom(this WebApplication app)
+		private static void UseSwaggerCustom(this WebApplication app)
 		{
 			if (app.Environment.IsDevelopment())
 			{
