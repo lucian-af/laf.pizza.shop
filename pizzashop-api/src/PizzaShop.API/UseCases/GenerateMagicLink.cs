@@ -8,18 +8,18 @@ using PizzaShop.API.Smtp.CommonMessages;
 
 namespace PizzaShop.API.UseCases
 {
-	public class AuthenticateUser(
+	public class GenerateMagicLink(
 		IAuthLinkRepository authLinkRepository,
 		IGenerateCode generateCode,
 		IOptions<PizzaShopConfigs> pizzaShopConfigs,
-		IMailAdapter mailAdapter)
+		IMailAdapter mailAdapter) : UseCaseBase<GenerateMagicLinkDto>
 	{
 		private readonly IAuthLinkRepository _authLinkRepository = authLinkRepository;
 		private readonly IGenerateCode _generateCode = generateCode;
 		private readonly PizzaShopConfigs _pizzaShopConfigs = pizzaShopConfigs.Value;
 		private readonly IMailAdapter _mailAdapter = mailAdapter;
 
-		public async Task Execute(AuthenticateDto data)
+		public override async Task Execute(GenerateMagicLinkDto data)
 		{
 			ArgumentNullException.ThrowIfNull(data, nameof(data));
 			ArgumentException.ThrowIfNullOrWhiteSpace(data.Email, nameof(data.Email));

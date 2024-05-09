@@ -2,7 +2,7 @@
 
 namespace PizzaShop.API.Domain.Models
 {
-	public class AuthenticateDto
+	public class GenerateMagicLinkDto
 	{
 		[EmailAddress(ErrorMessage = "E-mail invalid")]
 		[Required(ErrorMessage = "E-mail is required!")]

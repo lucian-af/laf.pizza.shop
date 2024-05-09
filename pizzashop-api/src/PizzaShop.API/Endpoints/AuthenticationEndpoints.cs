@@ -10,9 +10,9 @@ namespace PizzaShop.API.Endpoints
 		{
 			var groupBuilder = MainEndpoints.GetRouteGroupBuilder(app);
 
-			groupBuilder.MapPost("/authenticate", [AllowAnonymous] async (AuthenticateDto authenticateDto, AuthenticateUser authenticateUser) =>
+			groupBuilder.MapPost("/authenticate", [AllowAnonymous] async (GenerateMagicLinkDto data, GenerateMagicLink generateMagicLink) =>
 			{
-				await authenticateUser.Execute(authenticateDto);
+				await generateMagicLink.Execute(data);
 				return Results.Created();
 			}).WithOpenApi();
 

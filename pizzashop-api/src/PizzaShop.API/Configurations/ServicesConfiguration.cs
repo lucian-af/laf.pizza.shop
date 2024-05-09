@@ -39,7 +39,7 @@ namespace PizzaShop.API.Configurations
 		{
 			services.AddTransient<IConfigureOptions<SwaggerGenOptions>, SwaggerOptionsConfiguration>();
 			services.AddScoped<AddRestaurant>();
-			services.AddScoped<AuthenticateUser>();
+			services.AddScoped<GenerateMagicLink>();
 			services.AddScoped<IGenerateCode, GenerateUuid>();
 			services.AddScoped<IMailAdapter, MailAdapter>();
 			services.AddScoped<IMailBuilder, MailBuilder>();

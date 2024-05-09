@@ -4,11 +4,11 @@ using PizzaShop.API.Domain.Models;
 
 namespace PizzaShop.API.UseCases
 {
-	public class AddRestaurant(IRestaurantRepository restaurantRepository)
+	public class AddRestaurant(IRestaurantRepository restaurantRepository) : UseCaseBase<AddRestaurantDto>
 	{
 		private readonly IRestaurantRepository _restaurantRepository = restaurantRepository;
 
-		public async Task Execute(AddRestaurantDto data)
+		public override async Task Execute(AddRestaurantDto data)
 		{
 			var restaurant = new Restaurant(
 				 data.RestaurantName,
