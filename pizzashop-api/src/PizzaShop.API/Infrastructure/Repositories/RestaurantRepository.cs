@@ -17,6 +17,9 @@ namespace PizzaShop.API.Infrastructure.Repositories
 			_context.Restaurants.Add(restaurant);
 		}
 
+		public Restaurant GetResturantFromManager(Guid managerId)
+			=> _context.Restaurants.FirstOrDefault(rs => rs.ManagerId == managerId);
+
 		#region Disposible
 
 		public void Dispose()

@@ -7,5 +7,9 @@ namespace PizzaShop.API.Domain.Interfaces
 		User GetUserFromEmail(string email);
 
 		void AddAuthLink(AuthLink authLink);
+
+		AuthLink GetAuthLinkFromCode(string code);
+
+		void DeleteAuthLinkFromCode(string code);
 	}
 }

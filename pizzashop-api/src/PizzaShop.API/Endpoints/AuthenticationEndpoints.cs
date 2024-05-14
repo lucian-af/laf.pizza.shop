@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using PizzaShop.API.Domain.Models;
+using PizzaShop.API.Settings;
 using PizzaShop.API.UseCases;
 
 namespace PizzaShop.API.Endpoints
@@ -10,18 +13,27 @@ namespace PizzaShop.API.Endpoints
 		{
 			var groupBuilder = MainEndpoints.GetRouteGroupBuilder(app);
 
-			groupBuilder.MapPost("/authenticate", [AllowAnonymous] async (GenerateMagicLinkDto data, GenerateMagicLink generateMagicLink) =>
+			groupBuilder.MapPost("/authenticate", [AllowAnonymous] async
+				(GenerateMagicLinkDto data, GenerateMagicLink generateMagicLink) =>
 			{
 				await generateMagicLink.Execute(data);
 				return Results.Created();
 			}).WithOpenApi();
 
-			// TODO: refactor
-			//groupBuilder.MapGet("/authenticate/auth-links", [AllowAnonymous] async (AuthenticateDto authenticateDto, AuthenticateUser authenticateUser) =>
-			//{
-			//	await authenticateUser.Execute(authenticateDto);
-			//	return Results.Created();
-			//}).WithOpenApi();
+			groupBuilder.MapGet("/authenticate/auth-links", [AllowAnonymous] async (
+				[FromQuery] string code,
+				[FromQuery] string redirect,
+				AuthenticateByMagicLink authenticateByMagicLink) =>
+			{
+				await authenticateByMagicLink.Execute(code);
+				return Results.Redirect(redirect);
+			}).WithOpenApi();
+
+			groupBuilder.MapGet("/authenticate/sign-out", async (SignOut signOut, IOptions<PizzaShopConfigs> pizzaShopConfigs) =>
+			{
+				await signOut.Execute();
+				return Results.Redirect($"{pizzaShopConfigs.Value.AuthRedirectUrl}/sign-in");
+			}).WithOpenApi();
 
 			return app;
 		}

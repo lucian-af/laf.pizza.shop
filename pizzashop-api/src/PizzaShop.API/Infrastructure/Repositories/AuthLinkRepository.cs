@@ -18,6 +18,12 @@ namespace PizzaShop.API.Infrastructure.Repositories
 		public void AddAuthLink(AuthLink authLink)
 			=> _context.AuthLinks.Add(authLink);
 
+		public AuthLink GetAuthLinkFromCode(string code)
+			=> _context.AuthLinks.FirstOrDefault(al => al.Code.Equals(code));
+
+		public void DeleteAuthLinkFromCode(string code)
+			=> _context.AuthLinks.Remove(_context.AuthLinks.FirstOrDefault(al => al.Code.Equals(code)));
+
 		#region Disposible
 
 		public void Dispose()

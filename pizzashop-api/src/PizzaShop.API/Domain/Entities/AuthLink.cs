@@ -5,6 +5,8 @@ namespace PizzaShop.API.Domain.Entities
 {
 	public sealed class AuthLink : Auditable, IAggregateRoot
 	{
+		public DateTime AuthLinkExpiration { get; } = DateTime.Now.AddDays(AuthCookies.TotalDaysAuthLinkExpiration);
+
 		public string Code { get; }
 		public Guid UserId { get; }
 
@@ -20,6 +22,15 @@ namespace PizzaShop.API.Domain.Entities
 
 			Code = code;
 			UserId = userId;
+		}
+
+		public bool IsAuthLinkValid()
+		{
+			var daysSinceAuthLinkWasCreated = DateTime.Now.Day - CreatedAt.Day;
+			if (daysSinceAuthLinkWasCreated > AuthCookies.TotalDaysAuthLinkExpiration)
+				return false;
+
+			return true;
 		}
 	}
 }

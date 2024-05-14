@@ -16,6 +16,9 @@ namespace PizzaShop.API.Infrastructure.Mappings
 				.HasKey(u => u.Id);
 
 			builder
+				.Ignore(al => al.AuthLinkExpiration);
+
+			builder
 				.Property(u => u.Id)
 				.HasColumnName("id");
 

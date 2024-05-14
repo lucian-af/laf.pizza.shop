@@ -11,9 +11,13 @@ namespace PizzaShop.API.Configurations
 		{
 			var jwtSettings = new JwtSettings();
 			configuration.GetSection(nameof(JwtSettings)).Bind(jwtSettings);
-			authenticationBuilder.AddJwtBearer(
-				JwtBearerDefaults.AuthenticationScheme,
-				options => options.TokenValidationParameters = AuthenticateJwt.JwtTokenValidationParameters(jwtSettings.Secret));
+
+			authenticationBuilder.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+			{
+				options.RequireHttpsMetadata = false;
+				options.SaveToken = true;
+				options.TokenValidationParameters = AuthenticateJwt.JwtTokenValidationParameters(jwtSettings.Secret);
+			});
 		}
 	}
 }

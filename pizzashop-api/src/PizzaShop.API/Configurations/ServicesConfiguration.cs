@@ -27,6 +27,7 @@ namespace PizzaShop.API.Configurations
 			services.AddDatabaseConfiguration(configuration.GetConnectionString("PizzaShop"));
 			services.Configure<PizzaShopConfigs>(configuration.GetSection(nameof(PizzaShopConfigs)));
 			services.Configure<MailSettings>(configuration.GetSection(nameof(MailSettings)));
+			services.Configure<JwtSettings>(configuration.GetSection(nameof(JwtSettings)));
 			services.AddDependencyInjections();
 			services.AddVersioning();
 			services.AddCors();
@@ -40,6 +41,9 @@ namespace PizzaShop.API.Configurations
 			services.AddTransient<IConfigureOptions<SwaggerGenOptions>, SwaggerOptionsConfiguration>();
 			services.AddScoped<AddRestaurant>();
 			services.AddScoped<GenerateMagicLink>();
+			services.AddScoped<AuthenticateByMagicLink>();
+			services.AddScoped<SignOut>();
+			services.AddHttpContextAccessor();
 			services.AddScoped<IGenerateCode, GenerateUuid>();
 			services.AddScoped<IMailAdapter, MailAdapter>();
 			services.AddScoped<IMailBuilder, MailBuilder>();
@@ -69,8 +73,22 @@ namespace PizzaShop.API.Configurations
 
 		public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
 		{
-			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-					.AddJwt(configuration);
+			services
+				.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+				.AddJwt(configuration);
+			//.AddAuthentication(options =>
+			//{
+			//	options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+			//	options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+			//	options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+			//})
+			//.AddCookie(options =>
+			//{
+			//	options.Cookie.Name = AuthCookies.AuthCookieName;
+			//	options.Cookie.Path = "/";
+			//	options.Cookie.HttpOnly = true;
+			//	options.ExpireTimeSpan = TimeSpan.FromDays(AuthCookies.TotalDaysAuthLinkExpiration);
+			//});
 			services.AddAuthorization();
 
 			return services;

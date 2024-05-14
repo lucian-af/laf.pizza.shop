@@ -19,10 +19,12 @@ namespace PizzaShop.API.Configurations
 
 		private static void MapAllEndpoints(this WebApplication app)
 		{
+			app.UseAuthentication();
+			app.UseAuthorization();
+
 			app.UseRestaurantEndpoints();
 			app.UseUserEndpoints();
 			app.UseAuthenticationEndpoints();
-			app.UseAuthentication();
 		}
 
 		private static void UseSwaggerCustom(this WebApplication app)

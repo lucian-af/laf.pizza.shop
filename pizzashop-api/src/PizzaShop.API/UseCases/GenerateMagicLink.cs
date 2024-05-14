@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Options;
 using PizzaShop.API.Domain.Exceptions;
 using PizzaShop.API.Domain.Interfaces;
 using PizzaShop.API.Domain.Models;
@@ -35,12 +36,18 @@ namespace PizzaShop.API.UseCases
 			if (!success)
 				throw new Exception("Error on generate authentication.");
 
-			var authLink = $"{_pizzaShopConfigs.BaseUrl}/authenticate/auth-links?code={authLinkCode}&redirect={_pizzaShopConfigs.AuthRedirectUrl}";
+			var urlBase = $"{_pizzaShopConfigs.BaseUrl}/api/v1/authenticate/auth-links";
+			var queryParams = new Dictionary<string, string>
+			{
+				{ "code", authLinkCode },
+				{ "redirect", _pizzaShopConfigs.AuthRedirectUrl }
+			};
+			var authLink = new Uri(QueryHelpers.AddQueryString(urlBase, queryParams));
 
 			// TODO: refactor
 			_mailAdapter.SendMail(new EmailMessage
 			{
-				Title = $"Hello, {userFromEmail.Name}, authenticate to Pizza Shop",
+				Title = $"Hello {userFromEmail.Name}, authenticate to Pizza Shop",
 				To = data.Email,
 				Body = $"Use the following link to authenticate on Pizza Shop: {authLink}"
 			});
