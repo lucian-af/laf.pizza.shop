@@ -1,4 +1,5 @@
-﻿using PizzaShop.API.Domain.Entities;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace PizzaShop.API.UseCases
 {
@@ -7,9 +8,6 @@ namespace PizzaShop.API.UseCases
 		private readonly HttpContext _httpContext = httpContextAccessor.HttpContext;
 
 		public override Task Execute()
-		{
-			_httpContext.Response.Cookies.Delete(AuthCookies.AuthCookieName);
-			return Task.CompletedTask;
-		}
+			=> _httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 	}
 }

@@ -40,7 +40,7 @@ namespace PizzaShop.API.UseCases
 			var queryParams = new Dictionary<string, string>
 			{
 				{ "code", authLinkCode },
-				{ "redirect", _pizzaShopConfigs.AuthRedirectUrl }
+				{ "redirect", _pizzaShopConfigs.AppUrl }
 			};
 			var authLink = new Uri(QueryHelpers.AddQueryString(urlBase, queryParams));
 

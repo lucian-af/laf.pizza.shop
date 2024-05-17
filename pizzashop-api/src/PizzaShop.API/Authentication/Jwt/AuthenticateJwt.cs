@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PizzaShop.API.Settings;
@@ -13,7 +14,7 @@ namespace PizzaShop.API.Authentication.Jwt
 		private const string Issuer = "PizzaShop";
 		private const string Audience = "PizzaShop";
 
-		public string Generate(DateTime dataExpiracao, Dictionary<string, string> payload = null)
+		public string Generate<T>(DateTime dataExpiracao, T payload)
 		{
 			var hashKey = ConvertKeyToBytes(_jwtSettings.Secret);
 			var tokenDescriptor = new SecurityTokenDescriptor
@@ -22,7 +23,7 @@ namespace PizzaShop.API.Authentication.Jwt
 				Audience = Audience,
 				Expires = dataExpiracao.ToUniversalTime(),
 				SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(hashKey), SecurityAlgorithms.HmacSha256Signature),
-				Subject = new ClaimsIdentity(AddClaims(payload))
+				Subject = new ClaimsIdentity(AddPayload(payload))
 			};
 			var tokenHandler = new JwtSecurityTokenHandler();
 			return tokenHandler.WriteToken(tokenHandler.CreateToken(tokenDescriptor));
@@ -59,15 +60,22 @@ namespace PizzaShop.API.Authentication.Jwt
 			};
 		}
 
-		private static List<Claim> AddClaims(Dictionary<string, string> payload)
+		public T GetPayload<T>(string token)
+		{
+			var jwtSecurityToken = new JwtSecurityToken(token);
+			var payload = jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == "payload")?.Value;
+			ArgumentException.ThrowIfNullOrWhiteSpace(payload);
+			return JsonSerializer.Deserialize<T>(payload);
+		}
+
+		private static List<Claim> AddPayload<T>(T payload)
 		{
 			var claims = new List<Claim>();
 
-			if (payload?.Count > 0)
-				foreach (var (key, value) in payload)
-					claims.Add(new(key, value));
+			if (payload is not null)
+				claims.Add(new(nameof(payload), JsonSerializer.Serialize(payload)));
 
-			claims.Add(new(JwtRegisteredClaimNames.Iat, DateTime.Today.ToString()));
+			claims.Add(new(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString()));
 
 			return claims;
 		}

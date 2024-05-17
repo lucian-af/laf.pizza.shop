@@ -1,7 +1,10 @@
-﻿using PizzaShop.API.Authentication;
-using PizzaShop.API.Domain.Entities;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using PizzaShop.API.Authentication;
 using PizzaShop.API.Domain.Exceptions;
 using PizzaShop.API.Domain.Interfaces;
+using PizzaShop.API.Domain.Models;
 
 namespace PizzaShop.API.UseCases
 {
@@ -26,10 +29,10 @@ namespace PizzaShop.API.UseCases
 
 			var restaurantManager = _restaurantRepository.GetResturantFromManager(authLinkFromCode.UserId);
 
-			var payloadToken = new Dictionary<string, string>
+			var payloadToken = new UserTokenDto
 			{
-				{ "restaurantId", restaurantManager?.Id.ToString() },
-				{ "userId",  authLinkFromCode.UserId.ToString() }
+				RestaurantId = restaurantManager?.Id.ToString(),
+				UserId = authLinkFromCode.UserId.ToString()
 			};
 			var token = _authenticate.Generate(authLinkFromCode.AuthLinkExpiration, payloadToken);
 
@@ -44,14 +47,11 @@ namespace PizzaShop.API.UseCases
 		// TODO: refactor
 		private void SetCookies(string token, DateTime expireIn)
 		{
-			_httpContext.Response.Cookies.Delete(AuthCookies.AuthCookieName);
-			var cookiesOptions = new CookieOptions
-			{
-				HttpOnly = true,
-				Expires = expireIn,
-				Path = "/"
-			};
-			_httpContext.Response.Cookies.Append(AuthCookies.AuthCookieName, token, cookiesOptions);
+			var claims = new Claim[] { new("token", token) };
+			_httpContext.SignInAsync(
+				  CookieAuthenticationDefaults.AuthenticationScheme,
+				new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme)),
+				new AuthenticationProperties { IsPersistent = true, ExpiresUtc = expireIn });
 		}
 	}
 }

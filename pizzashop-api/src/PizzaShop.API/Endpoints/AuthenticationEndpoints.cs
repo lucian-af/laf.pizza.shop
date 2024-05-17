@@ -32,7 +32,7 @@ namespace PizzaShop.API.Endpoints
 			groupBuilder.MapGet("/authenticate/sign-out", async (SignOut signOut, IOptions<PizzaShopConfigs> pizzaShopConfigs) =>
 			{
 				await signOut.Execute();
-				return Results.Redirect($"{pizzaShopConfigs.Value.AuthRedirectUrl}/sign-in");
+				return Results.Redirect($"{pizzaShopConfigs.Value.AppUrl}/{pizzaShopConfigs.Value.AppUrlLogin}");
 			}).WithOpenApi();
 
 			return app;

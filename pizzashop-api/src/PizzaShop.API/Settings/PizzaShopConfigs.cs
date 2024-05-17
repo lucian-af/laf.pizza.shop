@@ -4,7 +4,8 @@
 	{
 		public ModeApplication Mode { get; set; } = ModeApplication.PRODUCTION;
 		public string BaseUrl { get; set; }
-		public string AuthRedirectUrl { get; set; }
+		public string AppUrl { get; set; }
+		public string AppUrlLogin { get; set; }
 	}
 
 	public enum ModeApplication

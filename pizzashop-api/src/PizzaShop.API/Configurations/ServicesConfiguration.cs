@@ -1,9 +1,9 @@
 ﻿using Asp.Versioning;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
 using PizzaShop.API.Authentication;
 using PizzaShop.API.Authentication.Jwt;
+using PizzaShop.API.Domain.Entities;
 using PizzaShop.API.Domain.Interfaces;
 using PizzaShop.API.Domain.Services;
 using PizzaShop.API.Infrastructure.Configurations;
@@ -23,7 +23,7 @@ namespace PizzaShop.API.Configurations
 				throw new ArgumentNullException(nameof(configuration), "IConfiguration is null.");
 
 			services.AddEndpointsApiExplorer();
-			services.AddSwaggerCustom();
+			services.AddSwaggerGen();
 			services.AddDatabaseConfiguration(configuration.GetConnectionString("PizzaShop"));
 			services.Configure<PizzaShopConfigs>(configuration.GetSection(nameof(PizzaShopConfigs)));
 			services.Configure<MailSettings>(configuration.GetSection(nameof(MailSettings)));
@@ -43,6 +43,8 @@ namespace PizzaShop.API.Configurations
 			services.AddScoped<GenerateMagicLink>();
 			services.AddScoped<AuthenticateByMagicLink>();
 			services.AddScoped<SignOut>();
+			services.AddScoped<GetCurrentUser>();
+			services.AddScoped<CustomCookieAuthenticationEvents>();
 			services.AddHttpContextAccessor();
 			services.AddScoped<IGenerateCode, GenerateUuid>();
 			services.AddScoped<IMailAdapter, MailAdapter>();
@@ -74,55 +76,15 @@ namespace PizzaShop.API.Configurations
 		public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
 		{
 			services
-				.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-				.AddJwt(configuration);
-			//.AddAuthentication(options =>
-			//{
-			//	options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-			//	options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-			//	options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-			//})
-			//.AddCookie(options =>
-			//{
-			//	options.Cookie.Name = AuthCookies.AuthCookieName;
-			//	options.Cookie.Path = "/";
-			//	options.Cookie.HttpOnly = true;
-			//	options.ExpireTimeSpan = TimeSpan.FromDays(AuthCookies.TotalDaysAuthLinkExpiration);
-			//});
+				.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+				.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+				{
+					options.Cookie.Name = AuthCookies.AuthCookieName;
+					options.Cookie.Path = "/";
+					options.Cookie.HttpOnly = true;
+					options.EventsType = typeof(CustomCookieAuthenticationEvents);
+				});
 			services.AddAuthorization();
-
-			return services;
-		}
-
-		public static IServiceCollection AddSwaggerCustom(this IServiceCollection services)
-		{
-			services.AddSwaggerGen(gen =>
-			{
-				gen.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-				{
-					Name = "Authorization",
-					Type = SecuritySchemeType.ApiKey,
-					Scheme = "Bearer",
-					BearerFormat = "JWT",
-					In = ParameterLocation.Header,
-					Description =
-					"JWT Authorizarion header using Bearer Scheme. Enter 'Bearer Example': \'Bearer 1a2b3c4d5e6f...\'"
-				});
-				gen.AddSecurityRequirement(new OpenApiSecurityRequirement
-				{
-					{
-						new OpenApiSecurityScheme
-						{
-							Reference = new OpenApiReference
-							{
-								Type = ReferenceType.SecurityScheme,
-								Id = "Bearer"
-							}
-						},
-						Array.Empty<string>()
-					}
-				});
-			});
 
 			return services;
 		}

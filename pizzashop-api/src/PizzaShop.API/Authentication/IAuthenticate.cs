@@ -2,8 +2,10 @@
 {
 	public interface IAuthenticate
 	{
-		string Generate(DateTime expireIn, Dictionary<string, string> payload = null);
+		string Generate<T>(DateTime expireIn, T payload);
 
 		bool Valid(string token);
+
+		T GetPayload<T>(string token);
 	}
 }

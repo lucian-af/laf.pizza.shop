@@ -1,4 +1,6 @@
-﻿namespace PizzaShop.API.Endpoints
+﻿using PizzaShop.API.UseCases;
+
+namespace PizzaShop.API.Endpoints
 {
 	public static class UserEndpoints
 	{
@@ -6,9 +8,10 @@
 		{
 			var groupBuilder = MainEndpoints.GetRouteGroupBuilder(app);
 
-			groupBuilder.MapGet("user/{userId}", (Guid userId) =>
+			groupBuilder.MapGet("/user/me", async (GetCurrentUser getCurrentUser) =>
 			{
-				return Results.Ok(userId);
+				var result = await getCurrentUser.Execute();
+				return Results.Ok(result.Data);
 			}).WithOpenApi();
 
 			return app;
