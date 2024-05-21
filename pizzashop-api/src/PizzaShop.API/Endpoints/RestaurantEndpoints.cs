@@ -15,6 +15,12 @@ namespace PizzaShop.API.Endpoints
 				return Results.Created();
 			}).WithOpenApi();
 
+			groupBuilder.MapGet("restaurant/managed-restaurant", async (GetManagedRestaurant getManagedRestaurant) =>
+			{
+				var result = await getManagedRestaurant.Execute();
+				return Results.Ok(result.Data);
+			}).WithOpenApi();
+
 			return app;
 		}
 	}

@@ -6,6 +6,6 @@
 
 		bool Valid(string token);
 
-		T GetPayload<T>(string token);
+		T GetPayload<T>();
 	}
 }

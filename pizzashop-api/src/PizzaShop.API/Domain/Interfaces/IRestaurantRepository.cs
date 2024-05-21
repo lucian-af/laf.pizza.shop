@@ -7,5 +7,7 @@ namespace PizzaShop.API.Domain.Interfaces
 		void AddResturant(Restaurant restaurant);
 
 		Restaurant GetResturantFromManager(Guid managerId);
+
+		Restaurant GetResturantById(Guid restaurantId);
 	}
 }

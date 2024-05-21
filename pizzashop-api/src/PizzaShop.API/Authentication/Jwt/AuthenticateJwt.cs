@@ -8,9 +8,11 @@ using PizzaShop.API.Settings;
 
 namespace PizzaShop.API.Authentication.Jwt
 {
-	public class AuthenticateJwt(IOptions<JwtSettings> jwtSettings) : IAuthenticate
+	public class AuthenticateJwt(IOptions<JwtSettings> jwtSettings,
+		IHttpContextAccessor httpContextAccessor) : IAuthenticate
 	{
 		private readonly JwtSettings _jwtSettings = jwtSettings.Value;
+		private readonly HttpContext _httpContext = httpContextAccessor.HttpContext;
 		private const string Issuer = "PizzaShop";
 		private const string Audience = "PizzaShop";
 
@@ -60,8 +62,11 @@ namespace PizzaShop.API.Authentication.Jwt
 			};
 		}
 
-		public T GetPayload<T>(string token)
+		public T GetPayload<T>()
 		{
+			var token = _httpContext.User.Claims.FirstOrDefault(s => s.Type == "token")?.Value;
+			ArgumentException.ThrowIfNullOrWhiteSpace(token, nameof(token));
+
 			var jwtSecurityToken = new JwtSecurityToken(token);
 			var payload = jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == "payload")?.Value;
 			ArgumentException.ThrowIfNullOrWhiteSpace(payload);

@@ -31,7 +31,7 @@ namespace PizzaShop.API.Configurations
 			services.AddDependencyInjections();
 			services.AddVersioning();
 			services.AddCors();
-			services.AddJwtAuthentication(configuration);
+			services.AddCookieConfiguration();
 
 			return services;
 		}
@@ -39,17 +39,19 @@ namespace PizzaShop.API.Configurations
 		public static IServiceCollection AddDependencyInjections(this IServiceCollection services)
 		{
 			services.AddTransient<IConfigureOptions<SwaggerGenOptions>, SwaggerOptionsConfiguration>();
-			services.AddScoped<AddRestaurant>();
-			services.AddScoped<GenerateMagicLink>();
-			services.AddScoped<AuthenticateByMagicLink>();
-			services.AddScoped<SignOut>();
-			services.AddScoped<GetCurrentUser>();
 			services.AddScoped<CustomCookieAuthenticationEvents>();
 			services.AddHttpContextAccessor();
 			services.AddScoped<IGenerateCode, GenerateUuid>();
 			services.AddScoped<IMailAdapter, MailAdapter>();
 			services.AddScoped<IMailBuilder, MailBuilder>();
 			services.AddScoped<IAuthenticate, AuthenticateJwt>();
+
+			services.AddScoped<AddRestaurant>();
+			services.AddScoped<GenerateMagicLink>();
+			services.AddScoped<AuthenticateByMagicLink>();
+			services.AddScoped<SignOut>();
+			services.AddScoped<GetCurrentUser>();
+			services.AddScoped<GetManagedRestaurant>();
 
 			return services;
 		}
@@ -73,7 +75,7 @@ namespace PizzaShop.API.Configurations
 			return services;
 		}
 
-		public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
+		public static IServiceCollection AddCookieConfiguration(this IServiceCollection services)
 		{
 			services
 				.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -83,6 +85,7 @@ namespace PizzaShop.API.Configurations
 					options.Cookie.Path = "/";
 					options.Cookie.HttpOnly = true;
 					options.EventsType = typeof(CustomCookieAuthenticationEvents);
+					options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 				});
 			services.AddAuthorization();
 
