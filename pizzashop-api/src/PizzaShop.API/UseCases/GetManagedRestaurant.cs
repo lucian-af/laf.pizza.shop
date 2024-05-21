@@ -24,7 +24,7 @@ namespace PizzaShop.API.UseCases
 			var restaurant = _restaurantRepository.GetResturantById(payload.RestaurantId.ToGuid());
 
 			if (payload.RestaurantId is null)
-				throw new NotFoundException("Restaurant not found.");
+				throw new NullValueException("Restaurant not found.");
 
 			return Task.FromResult(new Result<GetRestaurantDto>
 			{

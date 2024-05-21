@@ -26,7 +26,7 @@ namespace PizzaShop.API.UseCases
 			ArgumentException.ThrowIfNullOrWhiteSpace(data.Email, nameof(data.Email));
 
 			var userFromEmail = _authLinkRepository.GetUserFromEmail(data.Email)
-				?? throw new NotFoundException("User not found.");
+				?? throw new NullValueException("User not found.");
 
 			var authLinkCode = _generateCode.GenerateCode();
 

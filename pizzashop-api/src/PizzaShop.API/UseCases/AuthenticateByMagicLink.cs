@@ -22,7 +22,7 @@ namespace PizzaShop.API.UseCases
 		public override Task Execute(string code)
 		{
 			var authLinkFromCode = _authLinkRepository.GetAuthLinkFromCode(code)
-				?? throw new NotFoundException("Link not found;");
+				?? throw new NullValueException("Link not found;");
 
 			if (!authLinkFromCode.IsAuthLinkValid())
 				throw new DomainException("Auth link expired.");
