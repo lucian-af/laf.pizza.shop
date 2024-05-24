@@ -26,6 +26,7 @@ namespace PizzaShop.API.Infrastructure.Configurations
 		{
 			services.AddScoped<IRestaurantRepository, RestaurantRepository>();
 			services.AddScoped<IAuthLinkRepository, AuthLinkRepository>();
+			services.AddScoped<IUserRepository, UserRepository>();
 
 			return services;
 		}

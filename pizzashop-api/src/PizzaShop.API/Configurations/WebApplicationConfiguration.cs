@@ -13,7 +13,9 @@ namespace PizzaShop.API.Configurations
 			app.RunMigrations(pizzaShopConfigs);
 			app.MapAllEndpoints();
 			app.UseSwaggerCustom();
-			app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+			app.UseCors("PizzaShop");
+			app.UseStatusCodePages();
+			app.UseExceptionHandler();
 			return app;
 		}
 

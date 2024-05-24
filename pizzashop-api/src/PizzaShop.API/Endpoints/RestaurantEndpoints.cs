@@ -1,4 +1,5 @@
-﻿using PizzaShop.API.Domain.Models;
+﻿using Microsoft.AspNetCore.Authorization;
+using PizzaShop.API.Domain.Models;
 using PizzaShop.API.UseCases;
 
 namespace PizzaShop.API.Endpoints
@@ -9,7 +10,7 @@ namespace PizzaShop.API.Endpoints
 		{
 			var groupBuilder = MainEndpoints.GetRouteGroupBuilder(app);
 
-			groupBuilder.MapPost("restaurant", async (AddRestaurantDto request, AddRestaurant service) =>
+			groupBuilder.MapPost("restaurant", [AllowAnonymous] async (AddRestaurantDto request, AddRestaurant service) =>
 			{
 				await service.Execute(request);
 				return Results.Created();

@@ -23,8 +23,7 @@ namespace PizzaShop.API.Configurations
 								Title = "BadRequest",
 								Status = httpContext.Response.StatusCode,
 								Detail = exception.Message,
-							},
-						Exception = exception
+							}
 					});
 
 				default:
@@ -38,8 +37,7 @@ namespace PizzaShop.API.Configurations
 								Title = "Error",
 								Status = httpContext.Response.StatusCode,
 								Detail = "Internal Server Error",
-							},
-						Exception = exception
+							}
 					});
 			}
 		}

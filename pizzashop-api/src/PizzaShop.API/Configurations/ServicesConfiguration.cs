@@ -30,8 +30,15 @@ namespace PizzaShop.API.Configurations
 			services.Configure<JwtSettings>(configuration.GetSection(nameof(JwtSettings)));
 			services.AddDependencyInjections();
 			services.AddVersioning();
-			services.AddCors();
+			services.AddCors(policy =>
+			{
+				var pizzaShop = new PizzaShopConfigs();
+				configuration.GetSection(nameof(PizzaShopConfigs)).Bind(pizzaShop);
+				policy.AddPolicy("PizzaShop", policy
+					=> policy.AllowAnyMethod().AllowAnyHeader().WithOrigins(pizzaShop.AppUrl).AllowCredentials());
+			});
 			services.AddCookieConfiguration();
+			services.AddExceptionHandler<ExceptionToProblemDetailsHandler>();
 			services.AddProblemDetails(options =>
 			{
 				options.CustomizeProblemDetails = ctx =>
@@ -40,7 +47,6 @@ namespace PizzaShop.API.Configurations
 					ctx.ProblemDetails.Extensions.Add("instance", $"{ctx.HttpContext.Request.Method} {ctx.HttpContext.Request.Path}");
 				};
 			});
-			services.AddExceptionHandler<ExceptionToProblemDetailsHandler>();
 
 			return services;
 		}

@@ -1,9 +1,10 @@
 ﻿using PizzaShop.API.Domain.Enums;
 using PizzaShop.API.Domain.Exceptions;
+using PizzaShop.API.Domain.Interfaces;
 
 namespace PizzaShop.API.Domain.Entities
 {
-	public class User : Auditable
+	public class User : Auditable, IAggregateRoot
 	{
 		public string Name { get; }
 		public string Email { get; private set; }
