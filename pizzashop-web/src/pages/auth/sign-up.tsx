@@ -1,16 +1,30 @@
+import { registerRestaurant } from '@api/register-restaurant'
 import { Button } from '@components/ui/button'
 import { Checkbox } from '@components/ui/checkbox'
 import { Input } from '@components/ui/input'
 import { Label } from '@components/ui/label'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
 import { Helmet } from 'react-helmet-async'
 import { Controller, useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 const signUpFormSchema = z.object({
   restaurantName: z.string(),
   managerName: z.string(),
-  phone: z.string(),
+  phone: z
+    .string()
+    .regex(/\d/g, {
+      message: 'Digite somente números',
+    })
+    .min(10, {
+      message: 'Celular inválido',
+    })
+    .max(11, {
+      message: 'Celular inválido',
+    }),
   email: z.string().email().optional(),
   termsAccepted: z.boolean(),
 })
@@ -25,16 +39,37 @@ export function SignUp() {
     control,
     watch,
   } = useForm<SignUpForm>({
+    resolver: zodResolver(signUpFormSchema),
     defaultValues: {
       termsAccepted: false,
     },
+  })
+  const navigate = useNavigate()
+
+  const { mutateAsync: registerRestaurantFn } = useMutation({
+    mutationFn: registerRestaurant,
   })
 
   const terms = watch('termsAccepted')
 
   async function handleSignUp(data: SignUpForm) {
-    console.log('data:', data)
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    try {
+      await registerRestaurantFn({
+        restaurantName: data.restaurantName,
+        email: data.email,
+        managerName: data.managerName,
+        phone: String(data.phone),
+      })
+
+      toast.success('Restaurante cadastrado com sucesso!', {
+        action: {
+          label: 'Login',
+          onClick: () => navigate(`/sign-in?email=${data.email}`),
+        },
+      })
+    } catch {
+      toast.error('Erro ao cadastrar restaurante.')
+    }
   }
 
   return (
@@ -83,7 +118,12 @@ export function SignUp() {
 
             <div className="space-y-2">
               <Label htmlFor="phone">Seu celular</Label>
-              <Input id="phone" type="tel" {...register('phone')} />
+              <Input
+                id="phone"
+                type="phone"
+                placeholder="(99) 9 9999-9999"
+                {...register('phone')}
+              />
             </div>
 
             <div className="flex space-x-2">
