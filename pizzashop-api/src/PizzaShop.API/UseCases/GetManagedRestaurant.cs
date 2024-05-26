@@ -21,10 +21,8 @@ namespace PizzaShop.API.UseCases
 			if (payload.RestaurantId is null)
 				throw new ArgumentException("User is not manager.");
 
-			var restaurant = _restaurantRepository.GetResturantById(payload.RestaurantId.ToGuid());
-
-			if (payload.RestaurantId is null)
-				throw new NullValueException("Restaurant not found.");
+			var restaurant = _restaurantRepository.GetResturantById(payload.RestaurantId.ToGuid())
+				?? throw new NullValueException("Restaurant not found.");
 
 			return Task.FromResult(new Result<GetRestaurantDto>
 			{
