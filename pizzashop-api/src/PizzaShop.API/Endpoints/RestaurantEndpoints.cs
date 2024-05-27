@@ -22,6 +22,12 @@ namespace PizzaShop.API.Endpoints
 				return Results.Ok(result.Data);
 			}).WithOpenApi();
 
+			groupBuilder.MapPut("restaurant/profile", async (UpdateRestaurantDto request, UpdateRestaurant updateRestaurant) =>
+			{
+				await updateRestaurant.Execute(request);
+				return Results.NoContent();
+			}).WithOpenApi();
+
 			return app;
 		}
 	}

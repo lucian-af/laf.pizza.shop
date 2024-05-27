@@ -10,8 +10,8 @@ namespace PizzaShop.API.Domain.Entities
 		private Restaurant()
 		{ }
 
-		public string Name { get; }
-		public string Description { get; }
+		public string Name { get; private set; }
+		public string Description { get; private set; }
 		public Guid? ManagerId { get; private set; }
 
 		public User Manager { get; private set; }
@@ -34,6 +34,15 @@ namespace PizzaShop.API.Domain.Entities
 
 			Manager = newManager;
 			ManagerId = newManager.Id;
+		}
+
+		public void UpdateProfile(string name, string description)
+		{
+			if (string.IsNullOrWhiteSpace(name))
+				throw new DomainException("Name is required.");
+
+			Name = name;
+			Description = string.IsNullOrWhiteSpace(description) ? null : description;
 		}
 	}
 }
