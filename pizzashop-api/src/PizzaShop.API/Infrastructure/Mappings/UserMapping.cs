@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using PizzaShop.API.Domain.Entities;
+using PizzaShop.API.Domain.Entities.Authenticate;
 using PizzaShop.API.Domain.Enums;
 using PizzaShop.API.Infrastructure.Extensions;
 

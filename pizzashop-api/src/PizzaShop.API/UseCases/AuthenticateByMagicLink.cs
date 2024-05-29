@@ -9,19 +9,19 @@ using PizzaShop.API.Domain.Models;
 namespace PizzaShop.API.UseCases
 {
 	public class AuthenticateByMagicLink(
-		IAuthLinkRepository authLinkRepository,
+		IUserRepository userRepository,
 		IRestaurantRepository restaurantRepository,
 		IAuthenticate authenticate,
 		IHttpContextAccessor httpContextAccessor) : UseCaseBase<string>
 	{
-		private readonly IAuthLinkRepository _authLinkRepository = authLinkRepository;
+		private readonly IUserRepository _userRepository = userRepository;
 		private readonly IRestaurantRepository _restaurantRepository = restaurantRepository;
 		private readonly IAuthenticate _authenticate = authenticate;
 		private readonly HttpContext _httpContext = httpContextAccessor.HttpContext;
 
 		public override Task Execute(string code)
 		{
-			var authLinkFromCode = _authLinkRepository.GetAuthLinkFromCode(code)
+			var authLinkFromCode = _userRepository.GetAuthLinkFromCode(code)
 				?? throw new NullValueException("Link not found;");
 
 			if (!authLinkFromCode.IsAuthLinkValid())
@@ -36,8 +36,8 @@ namespace PizzaShop.API.UseCases
 			};
 			var token = _authenticate.Generate(authLinkFromCode.AuthLinkExpiration, payloadToken);
 
-			_authLinkRepository.DeleteAuthLinkFromCode(code);
-			_authLinkRepository.UnitOfWork.Commit();
+			_userRepository.DeleteAuthLinkFromCode(code);
+			_userRepository.UnitOfWork.Commit();
 
 			SetCookies(token, authLinkFromCode.AuthLinkExpiration);
 

@@ -1,8 +1,9 @@
-﻿using PizzaShop.API.Domain.Enums;
+﻿using PizzaShop.API.Domain.Entities.Shops;
+using PizzaShop.API.Domain.Enums;
 using PizzaShop.API.Domain.Exceptions;
 using PizzaShop.API.Domain.Interfaces;
 
-namespace PizzaShop.API.Domain.Entities
+namespace PizzaShop.API.Domain.Entities.Authenticate
 {
 	public class User : Auditable, IAggregateRoot
 	{

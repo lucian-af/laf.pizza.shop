@@ -1,7 +1,7 @@
 ﻿using PizzaShop.API.Domain.Exceptions;
 using PizzaShop.API.Domain.Interfaces;
 
-namespace PizzaShop.API.Domain.Entities
+namespace PizzaShop.API.Domain.Entities.Authenticate
 {
 	public sealed class AuthLink : Auditable, IAggregateRoot
 	{

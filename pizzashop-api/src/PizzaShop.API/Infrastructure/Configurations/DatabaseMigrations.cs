@@ -1,7 +1,7 @@
 ﻿using Bogus;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using PizzaShop.API.Domain.Entities;
+using PizzaShop.API.Domain.Entities.Shops;
 using PizzaShop.API.Infrastructure.Context;
 using PizzaShop.API.Settings;
 

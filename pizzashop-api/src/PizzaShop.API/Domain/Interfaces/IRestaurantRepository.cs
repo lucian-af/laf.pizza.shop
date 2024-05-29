@@ -1,4 +1,4 @@
-﻿using PizzaShop.API.Domain.Entities;
+﻿using PizzaShop.API.Domain.Entities.Shops;
 
 namespace PizzaShop.API.Domain.Interfaces
 {

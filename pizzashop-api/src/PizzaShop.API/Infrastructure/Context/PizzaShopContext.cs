@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using PizzaShop.API.Domain.Entities;
+using PizzaShop.API.Domain.Entities.Authenticate;
+using PizzaShop.API.Domain.Entities.Shops;
 using PizzaShop.API.Infrastructure.Data;
 
 namespace PizzaShop.API.Infrastructure.Context

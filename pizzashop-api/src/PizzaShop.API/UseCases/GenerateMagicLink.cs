@@ -10,12 +10,12 @@ using PizzaShop.API.Smtp.CommonMessages;
 namespace PizzaShop.API.UseCases
 {
 	public class GenerateMagicLink(
-		IAuthLinkRepository authLinkRepository,
+		IUserRepository userRepository,
 		IGenerateCode generateCode,
 		IOptions<PizzaShopConfigs> pizzaShopConfigs,
 		IMailAdapter mailAdapter) : UseCaseBase<GenerateMagicLinkDto>
 	{
-		private readonly IAuthLinkRepository _authLinkRepository = authLinkRepository;
+		private readonly IUserRepository _userRepository = userRepository;
 		private readonly IGenerateCode _generateCode = generateCode;
 		private readonly PizzaShopConfigs _pizzaShopConfigs = pizzaShopConfigs.Value;
 		private readonly IMailAdapter _mailAdapter = mailAdapter;
@@ -25,13 +25,14 @@ namespace PizzaShop.API.UseCases
 			ArgumentNullException.ThrowIfNull(data, nameof(data));
 			ArgumentException.ThrowIfNullOrWhiteSpace(data.Email, nameof(data.Email));
 
-			var userFromEmail = _authLinkRepository.GetUserFromEmail(data.Email)
+			// TODO: refactor: armazenar link no banco, recuperar para o caso de reenviar
+			var userFromEmail = _userRepository.GetUserFromEmail(data.Email)
 				?? throw new NullValueException("User not found.");
 
 			var authLinkCode = _generateCode.GenerateCode();
 
-			_authLinkRepository.AddAuthLink(new(authLinkCode, userFromEmail.Id));
-			var success = await _authLinkRepository.UnitOfWork.Commit();
+			_userRepository.AddAuthLink(new(authLinkCode, userFromEmail.Id));
+			var success = await _userRepository.UnitOfWork.Commit();
 
 			if (!success)
 				throw new Exception("Error on generate authentication.");
@@ -44,7 +45,7 @@ namespace PizzaShop.API.UseCases
 			};
 			var authLink = new Uri(QueryHelpers.AddQueryString(urlBase, queryParams));
 
-			// TODO: refactor
+			// TODO: refactor: usar Event Pattern
 			_mailAdapter.SendMail(new EmailMessage
 			{
 				Title = $"Hello {userFromEmail.Name}, authenticate to Pizza Shop",

@@ -1,4 +1,4 @@
-﻿using PizzaShop.API.Domain.Entities;
+﻿using PizzaShop.API.Domain.Entities.Shops;
 using PizzaShop.API.Domain.Interfaces;
 using PizzaShop.API.Domain.Models;
 

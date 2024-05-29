@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using PizzaShop.API.Authentication;
 using PizzaShop.API.Authentication.Jwt;
-using PizzaShop.API.Domain.Entities;
+using PizzaShop.API.Domain.Entities.Authenticate;
 using PizzaShop.API.Domain.Interfaces;
 using PizzaShop.API.Domain.Services;
 using PizzaShop.API.Infrastructure.Configurations;

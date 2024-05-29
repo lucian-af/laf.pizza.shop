@@ -1,4 +1,4 @@
-﻿namespace PizzaShop.API.Domain.Entities
+﻿namespace PizzaShop.API.Domain.Entities.Authenticate
 {
 	public static class AuthCookies
 	{
