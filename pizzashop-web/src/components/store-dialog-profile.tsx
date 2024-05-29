@@ -24,7 +24,7 @@ import { Textarea } from './ui/textarea'
 
 const storeProfileSchema = z.object({
   name: z.string().min(1),
-  description: z.string(),
+  description: z.string().nullable(),
 })
 
 type StoreProfileForm = z.infer<typeof storeProfileSchema>
@@ -37,23 +37,41 @@ export function StoreDialogProfile() {
     staleTime: Infinity,
   })
 
+  function updateManagdRestaurantCache({
+    name,
+    description,
+  }: StoreProfileForm) {
+    const cached = queryClient.getQueryData<GetManagedRestaurantResponse>([
+      'managed-restaurant',
+    ])
+
+    if (cached) {
+      queryClient.setQueryData<GetManagedRestaurantResponse>(
+        ['managed-restaurant'],
+        {
+          ...cached,
+          name,
+          description,
+        },
+      )
+    }
+
+    return { cached }
+  }
+
   const { mutateAsync: updateProfileFn } = useMutation({
     mutationFn: updateProfile,
-    onSuccess(_, { name, description }) {
-      const cached = queryClient.getQueryData<GetManagedRestaurantResponse>([
-        'managed-restaurant',
-      ])
+    onMutate({ name, description }) {
+      const { cached } = updateManagdRestaurantCache({
+        name,
+        description,
+      })
 
-      if (cached) {
-        queryClient.setQueryData<GetManagedRestaurantResponse>(
-          ['managed-restaurant'],
-          {
-            ...cached,
-            name,
-            description,
-          },
-        )
-      }
+      return { previousProfile: cached }
+    },
+    onError(_, __, context) {
+      if (context?.previousProfile)
+        updateManagdRestaurantCache(context.previousProfile)
     },
   })
 
@@ -72,7 +90,6 @@ export function StoreDialogProfile() {
   async function handleUpdateProfile(data: StoreProfileForm) {
     try {
       await updateProfileFn({ name: data.name, description: data.description })
-
       toast.success('Perfil atualizado com sucesso!')
     } catch {
       toast.error('Falha ao atualizar o perfil, tente novamente.')

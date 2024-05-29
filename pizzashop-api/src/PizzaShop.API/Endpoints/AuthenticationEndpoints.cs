@@ -29,10 +29,10 @@ namespace PizzaShop.API.Endpoints
 				return Results.Redirect(redirect);
 			}).WithOpenApi();
 
-			groupBuilder.MapGet("/authenticate/sign-out", async (SignOut signOut, IOptions<PizzaShopConfigs> pizzaShopConfigs) =>
+			groupBuilder.MapPost("/authenticate/sign-out", async (SignOut signOut, IOptions<PizzaShopConfigs> pizzaShopConfigs) =>
 			{
 				await signOut.Execute();
-				return Results.Redirect($"{pizzaShopConfigs.Value.AppUrl}/{pizzaShopConfigs.Value.AppUrlLogin}");
+				return Results.Ok();
 			}).WithOpenApi();
 
 			return app;
