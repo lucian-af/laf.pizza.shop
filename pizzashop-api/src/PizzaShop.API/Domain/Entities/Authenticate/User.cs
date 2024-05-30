@@ -1,4 +1,5 @@
-﻿using PizzaShop.API.Domain.Entities.Shops;
+﻿using PizzaShop.API.Domain.Entities.Orders;
+using PizzaShop.API.Domain.Entities.Shops;
 using PizzaShop.API.Domain.Enums;
 using PizzaShop.API.Domain.Exceptions;
 using PizzaShop.API.Domain.Interfaces;
@@ -13,6 +14,7 @@ namespace PizzaShop.API.Domain.Entities.Authenticate
 		public RoleUser Role { get; }
 
 		public virtual List<Restaurant> Restaurants { get; }
+		public virtual List<Order> Orders { get; }
 
 		public User(string name, string email, string phone, RoleUser role = RoleUser.Customer)
 		{

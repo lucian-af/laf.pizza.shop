@@ -1,9 +1,8 @@
-﻿using System.Globalization;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PizzaShop.API.Domain.Entities.Authenticate;
 using PizzaShop.API.Domain.Enums;
+using PizzaShop.API.Domain.Helpers;
 using PizzaShop.API.Infrastructure.Extensions;
 
 namespace PizzaShop.API.Infrastructure.Mappings
@@ -52,13 +51,5 @@ namespace PizzaShop.API.Infrastructure.Mappings
 				.IsRequired()
 				.HasConversion(EnumConverter.EnumToStringConverter<RoleUser>());
 		}
-	}
-
-	public static class EnumConverter
-	{
-		public static ValueConverter EnumToStringConverter<T>()
-			=> new ValueConverter<T, string>(
-				enumTo => enumTo.ToString().ToLower(),
-				enumFrom => (T)Enum.Parse(typeof(T), CultureInfo.CurrentCulture.TextInfo.ToTitleCase(enumFrom)));
 	}
 }

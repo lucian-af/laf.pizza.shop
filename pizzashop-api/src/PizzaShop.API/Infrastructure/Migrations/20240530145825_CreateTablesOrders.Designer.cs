@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PizzaShop.API.Infrastructure.Context;
@@ -11,9 +12,11 @@ using PizzaShop.API.Infrastructure.Context;
 namespace PizzaShop.API.Infrastructure.Migrations
 {
     [DbContext(typeof(PizzaShopContext))]
-    partial class PizzaShopContextModelSnapshot : ModelSnapshot
+    [Migration("20240530145825_CreateTablesOrders")]
+    partial class CreateTablesOrders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
