@@ -2,6 +2,7 @@
 using Npgsql;
 using PizzaShop.API.Domain.Entities;
 using PizzaShop.API.Domain.Entities.Authenticate;
+using PizzaShop.API.Domain.Entities.Orders;
 using PizzaShop.API.Domain.Entities.Shops;
 using PizzaShop.API.Infrastructure.Data;
 
@@ -12,6 +13,9 @@ namespace PizzaShop.API.Infrastructure.Context
 		public DbSet<User> Users { get; set; }
 		public DbSet<Restaurant> Restaurants { get; set; }
 		public DbSet<AuthLink> AuthLinks { get; set; }
+		public DbSet<Order> Orders { get; set; }
+		public DbSet<OrderItem> OrderItems { get; set; }
+		public DbSet<Product> Products { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

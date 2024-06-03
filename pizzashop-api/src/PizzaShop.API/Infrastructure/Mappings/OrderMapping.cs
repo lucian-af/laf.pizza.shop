@@ -30,8 +30,8 @@ namespace PizzaShop.API.Infrastructure.Mappings
 				.HasConversion(EnumConverter.EnumToStringConverter<OrderStatus>());
 
 			builder
-				.Property(u => u.ValorTotal)
-				.HasColumnName("valorTotal")
+				.Property(u => u.Total)
+				.HasColumnName("total")
 				.HasColumnType("money")
 				.IsRequired();
 
