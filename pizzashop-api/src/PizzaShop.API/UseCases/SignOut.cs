@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace PizzaShop.API.UseCases
 {
-	public class SignOut(IHttpContextAccessor httpContextAccessor) : UseCaseBase
+	public class SignOut(IHttpContextAccessor httpContextAccessor) : IUseCaseBase
 	{
 		private readonly HttpContext _httpContext = httpContextAccessor.HttpContext;
 
-		public override Task Execute()
+		public Task Execute()
 			=> _httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 	}
 }

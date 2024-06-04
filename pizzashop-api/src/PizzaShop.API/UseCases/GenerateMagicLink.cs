@@ -10,15 +10,12 @@ using PizzaShop.API.Smtp.CommonMessages;
 namespace PizzaShop.API.UseCases
 {
 	public class GenerateMagicLink(
-		IUserRepository userRepository,
-		IGenerateCode generateCode,
+		IUserRepository _userRepository,
+		IGenerateCode _generateCode,
 		IOptions<PizzaShopConfigs> pizzaShopConfigs,
-		IMailAdapter mailAdapter) : UseCaseBase<GenerateMagicLinkDto>
+		IMailAdapter _mailAdapter) : UseCaseBase<GenerateMagicLinkDto>
 	{
-		private readonly IUserRepository _userRepository = userRepository;
-		private readonly IGenerateCode _generateCode = generateCode;
 		private readonly PizzaShopConfigs _pizzaShopConfigs = pizzaShopConfigs.Value;
-		private readonly IMailAdapter _mailAdapter = mailAdapter;
 
 		public override async Task Execute(GenerateMagicLinkDto data)
 		{

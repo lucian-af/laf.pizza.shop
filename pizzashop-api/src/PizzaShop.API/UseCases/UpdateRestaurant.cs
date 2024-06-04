@@ -6,21 +6,14 @@ using PizzaShop.API.Domain.Models;
 
 namespace PizzaShop.API.UseCases
 {
-	public class UpdateRestaurant(
-		IAuthenticate authenticate,
-		IRestaurantRepository restaurantRepository) : UseCaseBase<UpdateRestaurantDto>
+	public class UpdateRestaurant(IAuthenticate authenticate, IRestaurantRepository _restaurantRepository)
+		: UseCaseBase<UpdateRestaurantDto>(authenticate)
 	{
-		private readonly IRestaurantRepository _restaurantRepository = restaurantRepository;
-		private readonly IAuthenticate _authenticate = authenticate;
-
 		public override async Task Execute(UpdateRestaurantDto data)
 		{
 			ArgumentNullException.ThrowIfNull(data, nameof(data));
 
-			var payload = _authenticate.GetPayload<UserTokenDto>()
-				?? throw new ArgumentException("Unauthorized.");
-
-			var restaurant = _restaurantRepository.GetResturantFromManager(payload.UserId.ToGuid())
+			var restaurant = _restaurantRepository.GetResturantFromManager(UserToken.UserId.ToGuid())
 				?? throw new NullValueException("Restaurant not found.");
 
 			restaurant.UpdateProfile(data.Name, data.Description);

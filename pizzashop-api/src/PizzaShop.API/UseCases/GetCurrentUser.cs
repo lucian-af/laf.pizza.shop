@@ -6,21 +6,14 @@ using PizzaShop.API.Domain.Models;
 
 namespace PizzaShop.API.UseCases
 {
-	public class GetCurrentUser(
-		IAuthenticate authenticate,
-		IUserRepository userRepository) : UseCaseBase<GetUserDto>
+	public class GetCurrentUser(IAuthenticate authenticate, IUserRepository _userRepository)
+		: UseCaseBase<GetUserDto>(authenticate)
 	{
-		private readonly IAuthenticate _authenticate = authenticate;
-		private readonly IUserRepository _userRepository = userRepository;
-
 		public override Task<Result<GetUserDto>> Execute()
 		{
-			var payload = _authenticate.GetPayload<UserTokenDto>()
-				?? throw new ArgumentException("Unauthorized.");
+			ArgumentNullException.ThrowIfNull(UserToken, nameof(UserToken));
 
-			ArgumentNullException.ThrowIfNull(payload, nameof(payload));
-
-			var user = _userRepository.GetUserById(payload.UserId.ToGuid())
+			var user = _userRepository.GetUserById(UserToken.UserId.ToGuid())
 				?? throw new NullValueException("User not found");
 
 			var currentUser = new GetUserDto

@@ -9,14 +9,11 @@ using PizzaShop.API.Domain.Models;
 namespace PizzaShop.API.UseCases
 {
 	public class AuthenticateByMagicLink(
-		IUserRepository userRepository,
-		IRestaurantRepository restaurantRepository,
-		IAuthenticate authenticate,
+		IUserRepository _userRepository,
+		IRestaurantRepository _restaurantRepository,
+		IAuthenticate _authenticate,
 		IHttpContextAccessor httpContextAccessor) : UseCaseBase<string>
 	{
-		private readonly IUserRepository _userRepository = userRepository;
-		private readonly IRestaurantRepository _restaurantRepository = restaurantRepository;
-		private readonly IAuthenticate _authenticate = authenticate;
 		private readonly HttpContext _httpContext = httpContextAccessor.HttpContext;
 
 		public override Task Execute(string code)
