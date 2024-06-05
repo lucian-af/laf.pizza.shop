@@ -11,6 +11,8 @@ namespace PizzaShop.API.UseCases
 
 		public virtual Task<Result<I>> Execute() => Task.FromResult(new Result<I>());
 
+		public virtual Task<Result<T>> Execute<T>(I data) => Task.FromResult(new Result<T>());
+
 		Task IUseCaseBase.Execute() => Task.CompletedTask;
 
 		private UserTokenDto GetPayload()

@@ -68,6 +68,7 @@ namespace PizzaShop.API.Configurations
 			services.AddScoped<GetCurrentUser>();
 			services.AddScoped<GetManagedRestaurant>();
 			services.AddScoped<UpdateRestaurant>();
+			services.AddScoped<GetOrderDetails>();
 
 			return services;
 		}

@@ -27,6 +27,7 @@ namespace PizzaShop.API.Configurations
 			app.UseRestaurantEndpoints();
 			app.UseUserEndpoints();
 			app.UseAuthenticationEndpoints();
+			app.UseOrderEndpoints();
 		}
 
 		private static void UseSwaggerCustom(this WebApplication app)
