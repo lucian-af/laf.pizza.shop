@@ -70,6 +70,7 @@ namespace PizzaShop.API.Configurations
 			services.AddScoped<GetManagedRestaurant>();
 			services.AddScoped<UpdateRestaurant>();
 			services.AddScoped<GetOrderDetails>();
+			services.AddScoped<AproveOrder>();
 
 			return services;
 		}

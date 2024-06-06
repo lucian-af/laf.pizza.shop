@@ -20,6 +20,9 @@ namespace PizzaShop.API.Infrastructure.Repositories
 							  .ThenInclude(s => s.Product)
 							  .FirstOrDefaultAsync();
 
+		public Task<Order> GetOrderById(Guid orderId)
+					=> _context.Orders.FindAsync(orderId).AsTask();
+
 		#region Disposible
 
 		public void Dispose()

@@ -22,7 +22,7 @@ namespace PizzaShop.API.Domain.Entities.Orders
 		public Restaurant Restaurant { get; private set; }
 		public List<OrderItem> OrderItems { get; private set; } = [];
 
-		private bool OrderUnavailable => Status is OrderStatus.Canceled or OrderStatus.Delivered;
+		private bool OrderUnavailable => Status is OrderStatus.Canceled or OrderStatus.Delivered or OrderStatus.Delivering;
 
 		public void AddItem(Guid productId, int quantity, decimal price)
 		{
@@ -33,6 +33,23 @@ namespace PizzaShop.API.Domain.Entities.Orders
 			OrderItems.Add(orderItem);
 		}
 
+		public void Aprove()
+		{
+			if (Status != OrderStatus.Pending)
+				throw new DomainException("Order is not pending.");
+
+			Status = OrderStatus.Processing;
+		}
+
+		public void Cancel()
+		{
+			if (OrderUnavailable)
+				throw new DomainException($"Status change not allowed. Order: {Status}");
+
+			Status = OrderStatus.Canceled;
+		}
+
+		// TODO: rever
 		public void ChangeStatus(OrderStatus newStatus)
 		{
 			if (OrderUnavailable)
