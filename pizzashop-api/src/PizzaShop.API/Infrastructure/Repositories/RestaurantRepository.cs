@@ -1,4 +1,5 @@
-﻿using PizzaShop.API.Domain.Entities.Shops;
+﻿using Microsoft.EntityFrameworkCore;
+using PizzaShop.API.Domain.Entities.Shops;
 using PizzaShop.API.Domain.Interfaces;
 using PizzaShop.API.Infrastructure.Context;
 using PizzaShop.API.Infrastructure.Data;
@@ -18,7 +19,9 @@ namespace PizzaShop.API.Infrastructure.Repositories
 		}
 
 		public Restaurant GetResturantFromManager(Guid managerId)
-			=> _context.Restaurants.FirstOrDefault(rs => rs.ManagerId == managerId);
+			=> _context.Restaurants
+					   .Include(r => r.Manager)
+					   .FirstOrDefault(rs => rs.ManagerId == managerId);
 
 		public Restaurant GetResturantById(Guid restaurantId)
 			=> _context.Restaurants.Find(restaurantId);

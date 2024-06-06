@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using PizzaShop.API.Domain.Enums;
 
 namespace PizzaShop.API.Endpoints
 {
@@ -15,7 +16,7 @@ namespace PizzaShop.API.Endpoints
 
 			return app.MapGroup("api/v{apiVersion:apiVersion}")
 					  .WithApiVersionSet(apiVersion)
-					  .RequireAuthorization();
+					  .RequireAuthorization(RoleUser.Manager.ToString().ToLower());
 		}
 	}
 }

@@ -14,7 +14,6 @@ namespace PizzaShop.API.Configurations
 		public override async Task ValidatePrincipal(CookieValidatePrincipalContext context)
 		{
 			var userPrincipal = context.Principal;
-
 			var token = (from c in userPrincipal.Claims
 						 where c.Type == "token"
 						 select c.Value).FirstOrDefault();
@@ -29,16 +28,14 @@ namespace PizzaShop.API.Configurations
 
 		public override Task RedirectToAccessDenied(RedirectContext<CookieAuthenticationOptions> context)
 		{
-			context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-			context.RedirectUri = UrlLogin;
-			return base.RedirectToAccessDenied(context);
+			context.Response.StatusCode = StatusCodes.Status403Forbidden;
+			return Task.CompletedTask;
 		}
 
 		public override Task RedirectToLogin(RedirectContext<CookieAuthenticationOptions> context)
 		{
 			context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-			context.RedirectUri = UrlLogin;
-			return base.RedirectToLogin(context);
+			return Task.CompletedTask;
 		}
 	}
 }

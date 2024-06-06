@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using PizzaShop.API.Authentication;
+using PizzaShop.API.Domain.Enums;
 using PizzaShop.API.Domain.Exceptions;
 using PizzaShop.API.Domain.Interfaces;
 using PizzaShop.API.Domain.Models;
@@ -36,17 +37,21 @@ namespace PizzaShop.API.UseCases
 			_userRepository.DeleteAuthLinkFromCode(code);
 			_userRepository.UnitOfWork.Commit();
 
-			SetCookies(token, authLinkFromCode.AuthLinkExpiration);
+			SetCookies(token, authLinkFromCode.AuthLinkExpiration, restaurantManager?.Manager.Role ?? RoleUser.Customer);
 
 			return Task.CompletedTask;
 		}
 
 		// TODO: refactor
-		private void SetCookies(string token, DateTime expireIn)
+		private void SetCookies(string token, DateTime expireIn, RoleUser role)
 		{
-			var claims = new Claim[] { new("token", token) };
+			var claims = new Claim[]
+			{
+				new("token", token),
+				new(ClaimTypes.Role, role.ToString().ToLower())
+			};
 			_httpContext.SignInAsync(
-				  CookieAuthenticationDefaults.AuthenticationScheme,
+				CookieAuthenticationDefaults.AuthenticationScheme,
 				new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme)),
 				new AuthenticationProperties { IsPersistent = true, ExpiresUtc = expireIn });
 		}

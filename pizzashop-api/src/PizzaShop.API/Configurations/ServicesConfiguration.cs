@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using PizzaShop.API.Authentication;
 using PizzaShop.API.Authentication.Jwt;
 using PizzaShop.API.Domain.Entities.Authenticate;
+using PizzaShop.API.Domain.Enums;
 using PizzaShop.API.Domain.Interfaces;
 using PizzaShop.API.Domain.Services;
 using PizzaShop.API.Infrastructure.Configurations;
@@ -95,7 +96,7 @@ namespace PizzaShop.API.Configurations
 		public static IServiceCollection AddCookieConfiguration(this IServiceCollection services)
 		{
 			services
-				.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+				.AddAuthentication()
 				.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
 				{
 					options.Cookie.Name = AuthCookies.AuthCookieName;
@@ -104,7 +105,11 @@ namespace PizzaShop.API.Configurations
 					options.EventsType = typeof(CustomCookieAuthenticationEvents);
 					options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 				});
-			services.AddAuthorization();
+
+			var policyRole = RoleUser.Manager.ToString().ToLower();
+			services
+				.AddAuthorizationBuilder()
+				.AddPolicy(policyRole, policy => policy.RequireRole(policyRole));
 
 			return services;
 		}
