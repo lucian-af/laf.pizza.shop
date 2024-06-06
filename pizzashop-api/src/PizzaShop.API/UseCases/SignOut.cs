@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace PizzaShop.API.UseCases
 {
-	public class SignOut(IHttpContextAccessor httpContextAccessor) : IUseCaseBase
+	public sealed class SignOut(IHttpContextAccessor httpContextAccessor) : IUseCaseBase
 	{
 		private readonly HttpContext _httpContext = httpContextAccessor.HttpContext;
 

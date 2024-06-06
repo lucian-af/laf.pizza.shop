@@ -4,7 +4,7 @@ using PizzaShop.API.Domain.Models;
 
 namespace PizzaShop.API.UseCases
 {
-	public class AddRestaurant(IRestaurantRepository restaurantRepository) : UseCaseBase<AddRestaurantDto>
+	public sealed class AddRestaurant(IRestaurantRepository restaurantRepository) : UseCaseBase<AddRestaurantDto>
 	{
 		private readonly IRestaurantRepository _restaurantRepository = restaurantRepository;
 

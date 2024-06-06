@@ -6,7 +6,7 @@ using PizzaShop.API.Domain.Models;
 
 namespace PizzaShop.API.UseCases
 {
-	public class GetCurrentUser(IAuthenticate authenticate, IUserRepository _userRepository)
+	public sealed class GetCurrentUser(IAuthenticate authenticate, IUserRepository _userRepository)
 		: UseCaseBase<GetUserDto>(authenticate)
 	{
 		public override Task<Result<GetUserDto>> Execute()

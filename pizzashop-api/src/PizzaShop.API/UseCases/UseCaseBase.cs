@@ -3,7 +3,7 @@ using PizzaShop.API.Domain.Models;
 
 namespace PizzaShop.API.UseCases
 {
-	public abstract class UseCaseBase<I>(IAuthenticate _authenticate = null) : IUseCaseBase
+	public abstract class UseCaseBase<I>(IAuthenticate _authenticate = null, bool _resturantRequired = false) : IUseCaseBase
 	{
 		protected UserTokenDto UserToken => GetPayload();
 
@@ -20,7 +20,11 @@ namespace PizzaShop.API.UseCases
 			if (_authenticate is null)
 				return null;
 
-			return _authenticate.GetPayload<UserTokenDto>() ?? throw new ArgumentException("Unauthorized.");
+			var payload = _authenticate.GetPayload<UserTokenDto>();
+
+			return payload is null || (_resturantRequired && payload.RestaurantId is null)
+				? throw new ArgumentException("Unauthorized.")
+				: payload;
 		}
 	}
 

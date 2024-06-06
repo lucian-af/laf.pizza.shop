@@ -6,12 +6,12 @@ using static PizzaShop.API.Domain.Models.GetOrderDetailsDto;
 
 namespace PizzaShop.API.UseCases
 {
-	public class GetOrderDetails(IAuthenticate authenticate, IOrderRepository _orderRepository)
+	public sealed class GetOrderDetails(IAuthenticate authenticate, IOrderRepository _orderRepository)
 		: UseCaseBase<Guid>(authenticate)
 	{
-		public override async Task<Result<GetOrderDetailsDto>> Execute(Guid data)
+		public override async Task<Result<GetOrderDetailsDto>> Execute(Guid orderId)
 		{
-			var order = await _orderRepository.GetOrderDetailsById(data)
+			var order = await _orderRepository.GetOrderDetailsById(orderId)
 				?? throw new NullValueException("Order not found.");
 
 			var result = new GetOrderDetailsDto

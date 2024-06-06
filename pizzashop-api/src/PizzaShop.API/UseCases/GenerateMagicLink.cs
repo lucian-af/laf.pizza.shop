@@ -9,7 +9,7 @@ using PizzaShop.API.Smtp.CommonMessages;
 
 namespace PizzaShop.API.UseCases
 {
-	public class GenerateMagicLink(
+	public sealed class GenerateMagicLink(
 		IUserRepository _userRepository,
 		IGenerateCode _generateCode,
 		IOptions<PizzaShopConfigs> pizzaShopConfigs,

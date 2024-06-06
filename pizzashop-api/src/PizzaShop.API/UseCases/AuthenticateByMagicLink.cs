@@ -9,7 +9,7 @@ using PizzaShop.API.Domain.Models;
 
 namespace PizzaShop.API.UseCases
 {
-	public class AuthenticateByMagicLink(
+	public sealed class AuthenticateByMagicLink(
 		IUserRepository _userRepository,
 		IRestaurantRepository _restaurantRepository,
 		IAuthenticate _authenticate,

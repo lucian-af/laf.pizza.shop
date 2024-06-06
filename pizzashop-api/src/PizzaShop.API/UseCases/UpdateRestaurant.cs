@@ -6,7 +6,7 @@ using PizzaShop.API.Domain.Models;
 
 namespace PizzaShop.API.UseCases
 {
-	public class UpdateRestaurant(IAuthenticate authenticate, IRestaurantRepository _restaurantRepository)
+	public sealed class UpdateRestaurant(IAuthenticate authenticate, IRestaurantRepository _restaurantRepository)
 		: UseCaseBase<UpdateRestaurantDto>(authenticate)
 	{
 		public override async Task Execute(UpdateRestaurantDto data)
