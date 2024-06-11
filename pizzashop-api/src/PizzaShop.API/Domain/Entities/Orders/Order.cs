@@ -41,12 +41,28 @@ namespace PizzaShop.API.Domain.Entities.Orders
 			Status = OrderStatus.Processing;
 		}
 
+		public void Dispatch()
+		{
+			if (Status != OrderStatus.Processing)
+				throw new DomainException($"Status change not allowed. Order in: {Status}");
+
+			Status = OrderStatus.Delivering;
+		}
+
+		public void Deliver()
+		{
+			if (Status != OrderStatus.Delivering)
+				throw new DomainException($"Status change not allowed. Order in: {Status}");
+
+			Status = OrderStatus.Delivered;
+		}
+
 		public void Cancel()
 		{
-			if (OrderUnavailable)
-				throw new DomainException($"Status change not allowed. Order: {Status}");
-
-			Status = OrderStatus.Canceled;
+			if (Status is OrderStatus.Pending or OrderStatus.Processing)
+				Status = OrderStatus.Canceled;
+			else
+				throw new DomainException($"Status change not allowed. Order in: {Status}");
 		}
 
 		// TODO: rever

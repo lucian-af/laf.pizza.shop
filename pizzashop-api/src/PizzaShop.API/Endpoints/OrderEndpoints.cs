@@ -14,9 +14,27 @@ namespace PizzaShop.API.Endpoints
 				return Results.Ok(result.Data);
 			}).WithOpenApi();
 
-			groupBuilder.MapGet("/orders/{orderId}/aprove", async (Guid orderId, AproveOrder aproveOrder) =>
+			groupBuilder.MapPatch("/orders/{orderId}/aprove", async (Guid orderId, AproveOrder aproveOrder) =>
 			{
 				await aproveOrder.Execute(orderId);
+				return Results.Ok();
+			}).WithOpenApi();
+
+			groupBuilder.MapPatch("/orders/{orderId}/cancel", async (Guid orderId, CancelOrder cancelOrder) =>
+			{
+				await cancelOrder.Execute(orderId);
+				return Results.Ok();
+			}).WithOpenApi();
+
+			groupBuilder.MapPatch("/orders/{orderId}/deliver", async (Guid orderId, DeliverOrder deliverOrder) =>
+			{
+				await deliverOrder.Execute(orderId);
+				return Results.Ok();
+			}).WithOpenApi();
+
+			groupBuilder.MapPatch("/orders/{orderId}/dispatch", async (Guid orderId, DispatchOrder dispatchOrder) =>
+			{
+				await dispatchOrder.Execute(orderId);
 				return Results.Ok();
 			}).WithOpenApi();
 
