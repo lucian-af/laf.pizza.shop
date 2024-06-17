@@ -11,8 +11,7 @@ namespace PizzaShop.API.UseCases
 	{
 		public override Task<Result<GetRestaurantDto>> Execute()
 		{
-			if (UserToken.RestaurantId is null)
-				throw new ArgumentException("User is not manager.");
+			UnauthorizedException.ThrowIfNullOrWhiteSpace(UserToken.RestaurantId, "User is not manager.");
 
 			var restaurant = _restaurantRepository.GetResturantById(UserToken.RestaurantId.ToGuid())
 				?? throw new NullValueException("Restaurant not found.");

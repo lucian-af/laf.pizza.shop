@@ -26,6 +26,20 @@ namespace PizzaShop.API.Configurations
 							}
 					});
 
+				case UnauthorizedException:
+					httpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
+					return _problemDetailsService.TryWriteAsync(new ProblemDetailsContext
+					{
+						HttpContext = httpContext,
+						ProblemDetails =
+							{
+								Type = exception.GetType().Name,
+								Title = "Forbidden",
+								Status = httpContext.Response.StatusCode,
+								Detail = exception.Message,
+							}
+					});
+
 				default:
 					httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
 					return _problemDetailsService.TryWriteAsync(new ProblemDetailsContext

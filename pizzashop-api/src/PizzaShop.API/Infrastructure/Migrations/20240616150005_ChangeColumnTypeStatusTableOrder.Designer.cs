@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PizzaShop.API.Infrastructure.Context;
@@ -11,9 +12,11 @@ using PizzaShop.API.Infrastructure.Context;
 namespace PizzaShop.API.Infrastructure.Migrations
 {
     [DbContext(typeof(PizzaShopContext))]
-    partial class PizzaShopContextModelSnapshot : ModelSnapshot
+    [Migration("20240616150005_ChangeColumnTypeStatusTableOrder")]
+    partial class ChangeColumnTypeStatusTableOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,11 +129,11 @@ namespace PizzaShop.API.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("restaurantId");
 
-                    b.Property<short>("Status")
+                    b.Property<short>("Status_New")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("smallint")
                         .HasDefaultValue((short)0)
-                        .HasColumnName("status");
+                        .HasColumnName("status_new");
 
                     b.Property<decimal>("Total")
                         .HasColumnType("money")
@@ -148,7 +151,7 @@ namespace PizzaShop.API.Infrastructure.Migrations
 
                     b.ToTable("orders", null, t =>
                         {
-                            t.HasCheckConstraint("CK_Order_Status", "status in (0,1,2,3,4)");
+                            t.HasCheckConstraint("CK_Order_Status", "status_new in (0,1,2,3,4)");
                         });
                 });
 

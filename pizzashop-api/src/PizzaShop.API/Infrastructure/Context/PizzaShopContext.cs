@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Npgsql;
 using PizzaShop.API.Domain.Entities;
 using PizzaShop.API.Domain.Entities.Authenticate;
 using PizzaShop.API.Domain.Entities.Orders;
@@ -40,13 +39,6 @@ namespace PizzaShop.API.Infrastructure.Context
 			}
 
 			return await base.SaveChangesAsync() > 0;
-		}
-
-		public class Teste : INpgsqlNameTranslator
-		{
-			public string TranslateMemberName(string clrName) => throw new NotImplementedException();
-
-			public string TranslateTypeName(string clrName) => throw new NotImplementedException();
 		}
 	}
 }

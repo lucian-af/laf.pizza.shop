@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PizzaShop.API.Domain.Entities.Orders;
 using PizzaShop.API.Domain.Enums;
-using PizzaShop.API.Domain.Helpers;
 using PizzaShop.API.Infrastructure.Extensions;
 
 namespace PizzaShop.API.Infrastructure.Mappings
@@ -14,7 +13,7 @@ namespace PizzaShop.API.Infrastructure.Mappings
 			builder.AddMappingForAuditableProperties();
 
 			builder.ToTable("orders",
-				o => o.HasCheckConstraint("CK_Order_Status", "status in ('pending', 'processing', 'delivering', 'delivered', 'canceled')"))
+				o => o.HasCheckConstraint("CK_Order_Status", "status in (0,1,2,3,4)"))
 				.HasKey(u => u.Id);
 
 			builder
@@ -24,10 +23,9 @@ namespace PizzaShop.API.Infrastructure.Mappings
 			builder
 				.Property(u => u.Status)
 				.HasColumnName("status")
-				.HasColumnType("text")
+				.HasColumnType("smallint")
 				.IsRequired()
-				.HasDefaultValue(OrderStatus.Pending)
-				.HasConversion(EnumConverter.EnumToStringConverter<OrderStatus>());
+				.HasDefaultValue(OrderStatus.Pending);
 
 			builder
 				.Property(u => u.Total)

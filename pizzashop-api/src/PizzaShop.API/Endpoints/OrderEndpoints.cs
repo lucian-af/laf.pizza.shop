@@ -1,4 +1,5 @@
-﻿using PizzaShop.API.UseCases;
+﻿using PizzaShop.API.Domain.Models;
+using PizzaShop.API.UseCases;
 
 namespace PizzaShop.API.Endpoints
 {
@@ -36,6 +37,12 @@ namespace PizzaShop.API.Endpoints
 			{
 				await dispatchOrder.Execute(orderId);
 				return Results.Ok();
+			}).WithOpenApi();
+
+			groupBuilder.MapPost("/orders", async (GetOrdersFiltersDto filters, GetOrders getOrders) =>
+			{
+				var result = await getOrders.Execute(filters);
+				return Results.Ok(result.Data);
 			}).WithOpenApi();
 
 			return app;
