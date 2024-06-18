@@ -1,14 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Bogus;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using PizzaShop.API.Domain.Entities;
 using PizzaShop.API.Domain.Entities.Authenticate;
 using PizzaShop.API.Domain.Entities.Orders;
 using PizzaShop.API.Domain.Entities.Shops;
 using PizzaShop.API.Infrastructure.Data;
+using PizzaShop.API.Settings;
 
 namespace PizzaShop.API.Infrastructure.Context
 {
-	public class PizzaShopContext(DbContextOptions options) : DbContext(options), IUnitOfWork
+	public class PizzaShopContext(DbContextOptions options, IOptions<PizzaShopConfigs> configs) : DbContext(options), IUnitOfWork
 	{
+		private readonly PizzaShopConfigs configs = configs.Value;
+
 		public DbSet<User> Users { get; set; }
 		public DbSet<Restaurant> Restaurants { get; set; }
 		public DbSet<AuthLink> AuthLinks { get; set; }
@@ -29,7 +34,13 @@ namespace PizzaShop.API.Infrastructure.Context
 				switch (entry.State)
 				{
 					case EntityState.Added:
-						entry.Entity.CreatedAt = DateTime.Now;
+						if (configs.Mode == ModeApplication.PRESENTATION && entry.Entity.ToString().Split('.').LastOrDefault().Equals(nameof(Order)))
+						{
+							var faker = new Faker("pt_BR");
+							entry.Entity.CreatedAt = faker.Date.Between(DateTime.Now, DateTime.Now.AddMonths(-1));
+						}
+						else
+							entry.Entity.CreatedAt = DateTime.Now;
 						break;
 
 					case EntityState.Modified:

@@ -66,6 +66,18 @@ namespace PizzaShop.API.Infrastructure.Repositories
 								 GROUP BY to_char(o.""createdAt"", 'YYYY-MM')");
 		}
 
+		public IEnumerable<GetDayOrdersAmountDto> GetDayOrdersAmount(Guid restaurantId, DateTime month)
+		{
+			var monthConvert = new DateTimeOffset(month).UtcDateTime;
+			return _context.Database.SqlQuery<GetDayOrdersAmountDto>(@$"
+								SELECT to_char(o.""createdAt"", 'YYYY-MM-DD') AS dayWithMonthAndYear,
+									   count(o.id) AS amount
+								  FROM orders o
+								 WHERE o.""restaurantId"" = {restaurantId}
+								   AND o.""createdAt"" >= {monthConvert}
+								 GROUP BY to_char(o.""createdAt"", 'YYYY-MM-DD')");
+		}
+
 		#region Disposible
 
 		public void Dispose()

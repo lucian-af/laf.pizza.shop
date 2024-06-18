@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Options;
+using PizzaShop.API.Settings;
 
 namespace PizzaShop.API.Infrastructure.Context
 {
@@ -15,7 +17,7 @@ namespace PizzaShop.API.Infrastructure.Context
 			var optionsBuilder = new DbContextOptionsBuilder<PizzaShopContext>();
 			optionsBuilder.UseNpgsql(configuration.GetConnectionString("PizzaShop"));
 
-			return new PizzaShopContext(optionsBuilder.Options);
+			return new PizzaShopContext(optionsBuilder.Options, Options.Create(new PizzaShopConfigs { Mode = ModeApplication.PRESENTATION }));
 		}
 	}
 }
