@@ -13,5 +13,7 @@ namespace PizzaShop.API.Domain.Interfaces
 		(IEnumerable<Order>, int) GetOrders(Guid restaurantId, Guid? orderId, OrderStatus? status, string customerName, int pageIndex = 0);
 
 		IEnumerable<GetMonthRevenueDto> GetMonthRevenue(Guid restaurantId, DateTime month);
+
+		IEnumerable<GetDayOrdersAmountDto> GetDayOrdersAmount(Guid restaurantId, DateTime month);
 	}
 }

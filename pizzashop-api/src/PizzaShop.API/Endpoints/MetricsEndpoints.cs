@@ -14,6 +14,12 @@ namespace PizzaShop.API.Endpoints
 				return Results.Ok(result.Data);
 			}).WithOpenApi();
 
+			groupBuilder.MapGet("/metrics/day-orders-amount", async (GetDayOrdersAmount getDayOrdersAmount) =>
+			{
+				var result = await getDayOrdersAmount.Execute();
+				return Results.Ok(result.Data);
+			}).WithOpenApi();
+
 			return app;
 		}
 	}
