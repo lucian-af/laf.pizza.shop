@@ -20,6 +20,12 @@ namespace PizzaShop.API.Endpoints
 				return Results.Ok(result.Data);
 			}).WithOpenApi();
 
+			groupBuilder.MapGet("/metrics/month-orders-amount", async (GetMonthOrdersAmount getMonthOrdersAmount) =>
+			{
+				var result = await getMonthOrdersAmount.Execute();
+				return Results.Ok(result.Data);
+			}).WithOpenApi();
+
 			return app;
 		}
 	}

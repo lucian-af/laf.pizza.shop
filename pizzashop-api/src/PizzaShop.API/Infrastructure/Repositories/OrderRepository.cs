@@ -54,9 +54,9 @@ namespace PizzaShop.API.Infrastructure.Repositories
 			return (query, totalOrders);
 		}
 
-		public IEnumerable<GetMonthRevenueDto> GetMonthRevenue(Guid restaurantId, DateTime month)
+		public IEnumerable<GetMonthRevenueDto> GetMonthRevenue(Guid restaurantId, DateTime date)
 		{
-			var monthConvert = new DateTimeOffset(month).UtcDateTime;
+			var monthConvert = new DateTimeOffset(date).UtcDateTime;
 			return _context.Database.SqlQuery<GetMonthRevenueDto>(@$"
 								SELECT to_char(o.""createdAt"", 'YYYY-MM') AS monthWithYear,
 									   sum(o.total) AS revenue
@@ -66,16 +66,28 @@ namespace PizzaShop.API.Infrastructure.Repositories
 								 GROUP BY to_char(o.""createdAt"", 'YYYY-MM')");
 		}
 
-		public IEnumerable<GetDayOrdersAmountDto> GetDayOrdersAmount(Guid restaurantId, DateTime month)
+		public IEnumerable<GetDayOrdersAmountDto> GetDayOrdersAmount(Guid restaurantId, DateTime date)
 		{
-			var monthConvert = new DateTimeOffset(month).UtcDateTime;
+			var monthConvert = new DateTimeOffset(date).UtcDateTime.ToString("yyyy-MM-dd");
 			return _context.Database.SqlQuery<GetDayOrdersAmountDto>(@$"
 								SELECT to_char(o.""createdAt"", 'YYYY-MM-DD') AS dayWithMonthAndYear,
 									   count(o.id) AS amount
 								  FROM orders o
 								 WHERE o.""restaurantId"" = {restaurantId}
-								   AND o.""createdAt"" >= {monthConvert}
+								   AND to_char(o.""createdAt"", 'YYYY-MM-DD') >= {monthConvert}
 								 GROUP BY to_char(o.""createdAt"", 'YYYY-MM-DD')");
+		}
+
+		public IEnumerable<GetMonthOrdersAmountDto> GetMonthOrdersAmount(Guid restaurantId, DateTime date)
+		{
+			var monthConvert = new DateTimeOffset(date).UtcDateTime;
+			return _context.Database.SqlQuery<GetMonthOrdersAmountDto>(@$"
+								SELECT to_char(o.""createdAt"", 'YYYY-MM') AS monthWithYear,
+									   count(o.id) AS amount
+								  FROM orders o
+								 WHERE o.""restaurantId"" = {restaurantId}
+								   AND o.""createdAt"" >= {monthConvert}
+								 GROUP BY to_char(o.""createdAt"", 'YYYY-MM')");
 		}
 
 		#region Disposible
