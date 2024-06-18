@@ -4,6 +4,7 @@ using PizzaShop.API.Domain.Enums;
 using PizzaShop.API.Domain.Interfaces;
 using PizzaShop.API.Infrastructure.Context;
 using PizzaShop.API.Infrastructure.Data;
+using PizzaShop.API.Infrastructure.Repositories.Dao;
 
 namespace PizzaShop.API.Infrastructure.Repositories
 {
@@ -51,6 +52,18 @@ namespace PizzaShop.API.Infrastructure.Repositories
 			query = query.Skip(pageIndex * 10).Take(10);
 
 			return (query, totalOrders);
+		}
+
+		public IEnumerable<GetMonthRevenueDto> GetMonthRevenue(Guid restaurantId, DateTime month)
+		{
+			var monthConvert = new DateTimeOffset(month).UtcDateTime;
+			return _context.Database.SqlQuery<GetMonthRevenueDto>(@$"
+								SELECT to_char(o.""createdAt"", 'YYYY-MM') AS monthWithYear,
+									   sum(o.total) AS revenue
+								  FROM orders o
+								 WHERE o.""restaurantId"" = {restaurantId}
+								   AND o.""createdAt"" >= {monthConvert}
+								 GROUP BY to_char(o.""createdAt"", 'YYYY-MM')");
 		}
 
 		#region Disposible
