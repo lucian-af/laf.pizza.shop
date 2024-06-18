@@ -26,6 +26,12 @@ namespace PizzaShop.API.Endpoints
 				return Results.Ok(result.Data);
 			}).WithOpenApi();
 
+			groupBuilder.MapGet("/metrics/month-canceled-orders-amount", async (GetMonthCanceledOrdersAmount getMonthCanceledOrdersAmount) =>
+			{
+				var result = await getMonthCanceledOrdersAmount.Execute();
+				return Results.Ok(result.Data);
+			}).WithOpenApi();
+
 			return app;
 		}
 	}

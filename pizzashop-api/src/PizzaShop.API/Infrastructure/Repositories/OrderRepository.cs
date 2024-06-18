@@ -90,6 +90,19 @@ namespace PizzaShop.API.Infrastructure.Repositories
 								 GROUP BY to_char(o.""createdAt"", 'YYYY-MM')");
 		}
 
+		public IEnumerable<GetMonthCanceledOrdersAmountDto> GetMonthCanceledOrdersAmount(Guid restaurantId, DateTime date)
+		{
+			var monthConvert = new DateTimeOffset(date).UtcDateTime;
+			return _context.Database.SqlQuery<GetMonthCanceledOrdersAmountDto>(@$"
+								SELECT to_char(o.""createdAt"", 'YYYY-MM') AS monthWithYear,
+									   count(o.id) AS amount
+								  FROM orders o
+								 WHERE o.""restaurantId"" = {restaurantId}
+								   AND o.""createdAt"" >= {monthConvert}
+								   AND o.status = {(int)OrderStatus.Canceled}
+								 GROUP BY to_char(o.""createdAt"", 'YYYY-MM')");
+		}
+
 		#region Disposible
 
 		public void Dispose()

@@ -17,5 +17,7 @@ namespace PizzaShop.API.Domain.Interfaces
 		IEnumerable<GetDayOrdersAmountDto> GetDayOrdersAmount(Guid restaurantId, DateTime date);
 
 		IEnumerable<GetMonthOrdersAmountDto> GetMonthOrdersAmount(Guid restaurantId, DateTime date);
+
+		IEnumerable<GetMonthCanceledOrdersAmountDto> GetMonthCanceledOrdersAmount(Guid restaurantId, DateTime date);
 	}
 }
