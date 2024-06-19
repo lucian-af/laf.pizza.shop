@@ -32,6 +32,12 @@ namespace PizzaShop.API.Endpoints
 				return Results.Ok(result.Data);
 			}).WithOpenApi();
 
+			groupBuilder.MapGet("/metrics/popular-products", async (GetPopularProducts getPopularProducts) =>
+			{
+				var result = await getPopularProducts.Execute();
+				return Results.Ok(result.Data);
+			}).WithOpenApi();
+
 			return app;
 		}
 	}

@@ -1,5 +1,6 @@
 ﻿using PizzaShop.API.Domain.Entities.Orders;
 using PizzaShop.API.Domain.Enums;
+using PizzaShop.API.Domain.Models;
 using PizzaShop.API.Infrastructure.Repositories.Dao;
 
 namespace PizzaShop.API.Domain.Interfaces
@@ -19,5 +20,7 @@ namespace PizzaShop.API.Domain.Interfaces
 		IEnumerable<GetMonthOrdersAmountDto> GetMonthOrdersAmount(Guid restaurantId, DateTime date);
 
 		IEnumerable<GetMonthCanceledOrdersAmountDto> GetMonthCanceledOrdersAmount(Guid restaurantId, DateTime date);
+
+		IEnumerable<GetPopularProductsDto> GetPopularProducts(Guid restaurantId, int topPopular = 5);
 	}
 }

@@ -2,6 +2,7 @@
 using PizzaShop.API.Domain.Entities.Orders;
 using PizzaShop.API.Domain.Enums;
 using PizzaShop.API.Domain.Interfaces;
+using PizzaShop.API.Domain.Models;
 using PizzaShop.API.Infrastructure.Context;
 using PizzaShop.API.Infrastructure.Data;
 using PizzaShop.API.Infrastructure.Repositories.Dao;
@@ -101,6 +102,22 @@ namespace PizzaShop.API.Infrastructure.Repositories
 								   AND o.""createdAt"" >= {monthConvert}
 								   AND o.status = {(int)OrderStatus.Canceled}
 								 GROUP BY to_char(o.""createdAt"", 'YYYY-MM')");
+		}
+
+		public IEnumerable<GetPopularProductsDto> GetPopularProducts(Guid restaurantId, int topPopular = 5)
+		{
+			var query = _context.Database
+				.SqlQuery<GetPopularProductsDto>(@$"
+						SELECT p.""name"" AS product, sum(oi.quantity) AS amount
+						  FROM ""orderItems""oi
+                    INNER JOIN orders o ON o.id = oi.""orderId""
+					 LEFT JOIN products p ON p.id = oi.""productId""
+					     WHERE o.""restaurantId"" = {restaurantId}
+					  GROUP BY p.""name""
+					  ORDER BY amount DESC
+						 LIMIT {topPopular}");
+
+			return query;
 		}
 
 		#region Disposible
