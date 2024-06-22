@@ -1,5 +1,4 @@
 ﻿using PizzaShop.API.Authentication;
-using PizzaShop.API.Domain.Exceptions;
 using PizzaShop.API.Domain.Extensions;
 using PizzaShop.API.Domain.Interfaces;
 using PizzaShop.API.Domain.Models;
@@ -7,12 +6,10 @@ using PizzaShop.API.Domain.Models;
 namespace PizzaShop.API.UseCases
 {
 	public sealed class GetOrders(IAuthenticate authenticate, IOrderRepository _orderRepository)
-		: UseCaseBase<GetOrdersFiltersDto>(authenticate)
+		: UseCaseBase<GetOrdersFiltersDto>(authenticate, true)
 	{
 		public override Task<Result<GetOrdersDto>> Execute(GetOrdersFiltersDto filters)
 		{
-			UnauthorizedException.ThrowIfNullOrWhiteSpace(UserToken.RestaurantId);
-
 			var (orders, total) = _orderRepository.GetOrders(
 				UserToken.RestaurantId.ToGuid(),
 				filters.OrderId,

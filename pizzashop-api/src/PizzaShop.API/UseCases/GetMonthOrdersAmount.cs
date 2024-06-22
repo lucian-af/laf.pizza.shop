@@ -6,7 +6,7 @@ using PizzaShop.API.Domain.Interfaces;
 namespace PizzaShop.API.UseCases
 {
 	public sealed class GetMonthOrdersAmount(IAuthenticate authenticate, IOrderRepository _orderRepository)
-		: UseCaseBase<CalculateMonthOrdersAmount>(authenticate)
+		: UseCaseBase<CalculateMonthOrdersAmount>(authenticate, true)
 	{
 		public override Task<Result<CalculateMonthOrdersAmount>> Execute()
 		{
