@@ -1,5 +1,6 @@
 ﻿using PizzaShop.API.Authentication;
 using PizzaShop.API.Domain.Exceptions;
+using PizzaShop.API.Domain.Extensions;
 using PizzaShop.API.Domain.Interfaces;
 
 namespace PizzaShop.API.UseCases
@@ -9,7 +10,7 @@ namespace PizzaShop.API.UseCases
 	{
 		public override async Task Execute(Guid data)
 		{
-			var order = await _orderRepository.GetOrderById(data)
+			var order = await _orderRepository.GetOrderById(data, UserToken.RestaurantId.ToGuid())
 				?? throw new NullValueException("Order not found.");
 
 			order.Aprove();

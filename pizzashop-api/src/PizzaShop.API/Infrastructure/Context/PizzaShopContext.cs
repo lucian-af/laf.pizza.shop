@@ -37,7 +37,7 @@ namespace PizzaShop.API.Infrastructure.Context
 						if (configs.Mode == ModeApplication.PRESENTATION && entry.Entity.ToString().Split('.').LastOrDefault().Equals(nameof(Order)))
 						{
 							var faker = new Faker("pt_BR");
-							entry.Entity.CreatedAt = faker.Date.Between(DateTime.Now, DateTime.Now.AddMonths(-1));
+							entry.Entity.CreatedAt = faker.Date.Between(DateTime.Now.AddMonths(-5), DateTime.Now.AddMonths(-4));
 						}
 						else
 							entry.Entity.CreatedAt = DateTime.Now;

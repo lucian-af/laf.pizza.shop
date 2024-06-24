@@ -38,6 +38,12 @@ namespace PizzaShop.API.Endpoints
 				return Results.Ok(result.Data);
 			}).WithOpenApi();
 
+			groupBuilder.MapGet("/metrics/daily-revenue-in-period", async (DateTime from, DateTime to, GetDailyRevenueInPeriod getDailyRevenueInPeriod) =>
+			{
+				var result = await getDailyRevenueInPeriod.Execute(new() { From = from, To = to });
+				return Results.Ok(result.Data);
+			}).WithOpenApi();
+
 			return app;
 		}
 	}

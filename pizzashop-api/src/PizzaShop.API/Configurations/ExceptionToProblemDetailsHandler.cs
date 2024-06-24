@@ -11,6 +11,7 @@ namespace PizzaShop.API.Configurations
 		{
 			switch (exception)
 			{
+				case ArgumentException:
 				case NullValueException:
 				case DomainException:
 					httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;

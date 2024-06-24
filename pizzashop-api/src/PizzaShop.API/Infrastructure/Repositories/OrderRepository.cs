@@ -15,16 +15,16 @@ namespace PizzaShop.API.Infrastructure.Repositories
 
 		public IUnitOfWork UnitOfWork => _context;
 
-		public Task<Order> GetOrderDetailsById(Guid orderId)
-			=> _context.Orders.Where(o => o.Id.Equals(orderId))
+		public Task<Order> GetOrderDetailsById(Guid orderId, Guid restaurantId)
+			=> _context.Orders.Where(o => o.Id.Equals(orderId) && o.RestaurantId.Equals(restaurantId))
 							  .AsNoTracking()
 							  .Include(s => s.Customer)
 							  .Include(s => s.OrderItems)
 							  .ThenInclude(s => s.Product)
 							  .FirstOrDefaultAsync();
 
-		public Task<Order> GetOrderById(Guid orderId)
-					=> _context.Orders.FindAsync(orderId).AsTask();
+		public Task<Order> GetOrderById(Guid orderId, Guid restaurantId)
+					=> _context.Orders.FirstOrDefaultAsync(o => o.Id.Equals(orderId) && o.RestaurantId.Equals(restaurantId));
 
 		public (IEnumerable<Order>, int) GetOrders(Guid restaurantId, Guid? orderId, OrderStatus? status, string customerName, int pageIndex = 0)
 		{
@@ -116,6 +116,24 @@ namespace PizzaShop.API.Infrastructure.Repositories
 					  GROUP BY p.""name""
 					  ORDER BY amount DESC
 						 LIMIT {topPopular}");
+
+			return query;
+		}
+
+		public IEnumerable<GetDailyRevenueInPeriodDto> GetDailyRevenueInPeriod(Guid restaurantId, DateTime startDate, DateTime endDate)
+		{
+			var startDateConvert = new DateTimeOffset(startDate).UtcDateTime;
+			var endDateConvert = new DateTimeOffset(endDate).UtcDateTime;
+
+			var query = _context.Database
+				.SqlQuery<GetDailyRevenueInPeriodDto>(@$"
+						SELECT to_char(o.""createdAt"", 'DD/MM') AS dayWithMonth,
+    						   sum(o.total) AS revenue
+						  FROM orders o
+						 WHERE o.""restaurantId"" = {restaurantId}
+						   AND o.""createdAt"" BETWEEN {startDateConvert} AND {endDateConvert}
+					  GROUP BY to_char(o.""createdAt"", 'DD/MM')
+					");
 
 			return query;
 		}

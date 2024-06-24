@@ -80,6 +80,7 @@ namespace PizzaShop.API.Configurations
 			services.AddScoped<GetMonthOrdersAmount>();
 			services.AddScoped<GetMonthCanceledOrdersAmount>();
 			services.AddScoped<GetPopularProducts>();
+			services.AddScoped<GetDailyRevenueInPeriod>();
 
 			return services;
 		}

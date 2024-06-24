@@ -6,7 +6,7 @@ using PizzaShop.API.Domain.Interfaces;
 namespace PizzaShop.API.UseCases
 {
 	public sealed class GetMonthRevenue(IAuthenticate authenticate, IOrderRepository _orderRepository)
-		: UseCaseBase<CalculateMonthRevenue>(authenticate, true)
+		: UseCaseBase<CalculateMonthRevenue>(authenticate, _resturantRequired: true)
 	{
 		public override Task<Result<CalculateMonthRevenue>> Execute()
 		{

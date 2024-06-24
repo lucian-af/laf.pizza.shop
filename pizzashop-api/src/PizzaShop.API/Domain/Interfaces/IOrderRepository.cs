@@ -7,9 +7,9 @@ namespace PizzaShop.API.Domain.Interfaces
 {
 	public interface IOrderRepository : IRepository<Order>
 	{
-		Task<Order> GetOrderDetailsById(Guid orderId);
+		Task<Order> GetOrderDetailsById(Guid orderId, Guid restaurantId);
 
-		Task<Order> GetOrderById(Guid orderId);
+		Task<Order> GetOrderById(Guid orderId, Guid restaurantId);
 
 		(IEnumerable<Order>, int) GetOrders(Guid restaurantId, Guid? orderId, OrderStatus? status, string customerName, int pageIndex = 0);
 
@@ -22,5 +22,7 @@ namespace PizzaShop.API.Domain.Interfaces
 		IEnumerable<GetMonthCanceledOrdersAmountDto> GetMonthCanceledOrdersAmount(Guid restaurantId, DateTime date);
 
 		IEnumerable<GetPopularProductsDto> GetPopularProducts(Guid restaurantId, int topPopular = 5);
+
+		IEnumerable<GetDailyRevenueInPeriodDto> GetDailyRevenueInPeriod(Guid restaurantId, DateTime startDate, DateTime endDate);
 	}
 }

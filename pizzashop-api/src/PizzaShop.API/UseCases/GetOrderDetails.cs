@@ -1,5 +1,6 @@
 ﻿using PizzaShop.API.Authentication;
 using PizzaShop.API.Domain.Exceptions;
+using PizzaShop.API.Domain.Extensions;
 using PizzaShop.API.Domain.Interfaces;
 using PizzaShop.API.Domain.Models;
 using static PizzaShop.API.Domain.Models.GetOrderDetailsDto;
@@ -7,11 +8,11 @@ using static PizzaShop.API.Domain.Models.GetOrderDetailsDto;
 namespace PizzaShop.API.UseCases
 {
 	public sealed class GetOrderDetails(IAuthenticate authenticate, IOrderRepository _orderRepository)
-		: UseCaseBase<Guid>(authenticate)
+		: UseCaseBase<Guid>(authenticate, _resturantRequired: true)
 	{
 		public override async Task<Result<GetOrderDetailsDto>> Execute(Guid orderId)
 		{
-			var order = await _orderRepository.GetOrderDetailsById(orderId)
+			var order = await _orderRepository.GetOrderDetailsById(orderId, UserToken.RestaurantId.ToGuid())
 				?? throw new NullValueException("Order not found.");
 
 			var result = new GetOrderDetailsDto

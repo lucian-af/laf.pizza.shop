@@ -6,7 +6,7 @@ using PizzaShop.API.Domain.Models;
 namespace PizzaShop.API.UseCases
 {
 	public sealed class GetPopularProducts(IAuthenticate authenticate, IOrderRepository _orderRepository)
-		: UseCaseBase<List<GetPopularProductsDto>>(authenticate, true)
+		: UseCaseBase<List<GetPopularProductsDto>>(authenticate, _resturantRequired: true)
 	{
 		public override Task<Result<List<GetPopularProductsDto>>> Execute()
 		{
