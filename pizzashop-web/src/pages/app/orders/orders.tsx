@@ -1,3 +1,4 @@
+import { getOrders } from '@api/get-orders'
 import { Pagination } from '@components/pagination'
 import {
   Table,
@@ -6,30 +7,32 @@ import {
   TableHeader,
   TableRow,
 } from '@components/ui/table'
+import { useQuery } from '@tanstack/react-query'
 import { Helmet } from 'react-helmet-async'
+import { useSearchParams } from 'react-router-dom'
+import { z } from 'zod'
 
 import { OrderTableFilters } from './order-table-filters'
 import { OrderTableRow } from './order-table-row'
 
-type TableHeaderConfig = {
-  headers: Array<{
-    description: string | null
-    width: string | null
-  }>
-}
-
 export function Orders() {
-  const tableHeaderConfig: TableHeaderConfig = {
-    headers: [
-      { description: null, width: '64' },
-      { description: 'Identificador', width: '140' },
-      { description: 'Realizado há', width: '180' },
-      { description: 'Status', width: '140' },
-      { description: 'Cliente', width: null },
-      { description: 'Total do pedido', width: '140' },
-      { description: null, width: '164' },
-      { description: null, width: '132' },
-    ],
+  const [searchParams, setSearchParams] = useSearchParams()
+  const pageIndex = z.coerce
+    .number()
+    .transform((page) => page - 1)
+    .parse(searchParams.get('page') ?? '1')
+
+  const { data: result } = useQuery({
+    queryKey: ['orders', pageIndex],
+    queryFn: () => getOrders({ pageIndex }),
+  })
+
+  function handlePaginate(pageIndex: number) {
+    setSearchParams((state) => {
+      state.set('page', (pageIndex + 1).toString())
+
+      return state
+    })
   }
 
   return (
@@ -44,27 +47,33 @@ export function Orders() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  {tableHeaderConfig.headers.map((header) => {
-                    return (
-                      <TableHead
-                        key={header.description}
-                        className={header.width ? `w-[${header.width}px]` : ''}
-                      >
-                        {header.description}
-                      </TableHead>
-                    )
-                  })}
+                  <TableHead className="w-[64px]"></TableHead>
+                  <TableHead className="w-[300px]">Identificador</TableHead>
+                  <TableHead className="w-[180px]">Realizado há</TableHead>
+                  <TableHead className="w-[140px]">Status</TableHead>
+                  <TableHead>Cliente</TableHead>
+                  <TableHead className="w-[140px]">Total do pedido</TableHead>
+                  <TableHead className="w-[164px]"></TableHead>
+                  <TableHead className="w-[132px]"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {Array.from({ length: 15 }).map((_, i) => (
-                  <OrderTableRow key={i} />
-                ))}
+                {result?.orders &&
+                  result.orders.map((order) => (
+                    <OrderTableRow key={order.orderId} order={order} />
+                  ))}
               </TableBody>
             </Table>
           </div>
 
-          <Pagination totalCount={105} pageIndex={0} perPage={10} />
+          {result && (
+            <Pagination
+              pageIndex={result.pageIndex}
+              totalCount={result.totalCount}
+              perPage={result.perPage}
+              onPageChange={handlePaginate}
+            />
+          )}
         </div>
       </div>
     </>
