@@ -7,59 +7,95 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@components/ui/select'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Search, X } from 'lucide-react'
+import { Controller, useForm } from 'react-hook-form'
+import { useSearchParams } from 'react-router-dom'
+import { z } from 'zod'
 
-export enum StatusOrdersEnum {
-  ALL,
-  PENDING,
-  CANCELED,
-  PROCESSING,
-  DELIVERING,
-  DELIVERED,
-}
+const orderFiltersSchema = z.object({
+  orderId: z.string().optional(),
+  status: z.string().optional(),
+  customerName: z.string().optional(),
+})
 
-class StatusOrdersUtil {
-  public static getDescription(status: StatusOrdersEnum) {
-    switch (status) {
-      case StatusOrdersEnum.ALL:
-        return 'Todos status'
-      case StatusOrdersEnum.PENDING:
-        return 'Pendente'
-      case StatusOrdersEnum.CANCELED:
-        return 'Cancelado'
-      case StatusOrdersEnum.PROCESSING:
-        return 'Em preparo'
-      case StatusOrdersEnum.DELIVERING:
-        return 'Em entrega'
-      case StatusOrdersEnum.DELIVERED:
-        return 'Entregue'
-    }
-  }
-}
+type OrderFiltersSchema = z.infer<typeof orderFiltersSchema>
 
 export function OrderTableFilters() {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const orderId = searchParams.get('orderId')
+  const customerName = searchParams.get('customerName')
+  const status = searchParams.get('status')
+
+  const { register, handleSubmit, control } = useForm<OrderFiltersSchema>({
+    resolver: zodResolver(orderFiltersSchema),
+    defaultValues: {
+      orderId: orderId ?? '',
+      status: status ?? 'all',
+      customerName: customerName ?? '',
+    },
+  })
+
+  function handleFilter({ orderId, status, customerName }: OrderFiltersSchema) {
+    setSearchParams((state) => {
+      if (orderId) state.set('orderId', orderId)
+      else state.delete('orderId')
+
+      if (customerName) state.set('customerName', customerName)
+      else state.delete('customerName')
+
+      if (status) state.set('status', status)
+      else state.delete('status')
+
+      state.set('page', '1')
+
+      return state
+    })
+  }
+
   return (
-    <form className="flex flex-wrap items-center gap-2">
+    <form
+      className="flex flex-wrap items-center gap-2"
+      onSubmit={handleSubmit(handleFilter)}
+    >
       <span className="text-sm font-semibold">Filtros:</span>
-      <Input placeholder="ID do pedido" className="h-8 w-auto" />
-      <Input placeholder="Nome do cliente" className="h-8 w-[320px] flex-1" />
-      <Select
-        defaultValue={StatusOrdersUtil.getDescription(StatusOrdersEnum.ALL)}
-      >
-        <SelectTrigger className="h-8 w-[180px]">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {Array.from({ length: 6 }).map((_, i) => (
-            <SelectItem
-              key={i}
-              value={StatusOrdersUtil.getDescription(i as StatusOrdersEnum)}
+      <Input
+        placeholder="ID do pedido"
+        className="h-8 w-auto"
+        {...register('orderId')}
+      />
+      <Input
+        placeholder="Nome do cliente"
+        className="h-8 w-[320px] flex-1"
+        {...register('customerName')}
+      />
+      <Controller
+        name="status"
+        control={control}
+        render={({ field: { name, onChange, value, disabled } }) => {
+          return (
+            <Select
+              defaultValue="all"
+              name={name}
+              onValueChange={onChange}
+              value={value}
+              disabled={disabled}
             >
-              {StatusOrdersUtil.getDescription(i as StatusOrdersEnum)}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+              <SelectTrigger className="h-8 w-[180px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos status</SelectItem>
+                <SelectItem value="pending">Pendente</SelectItem>
+                <SelectItem value="processing">Em Preparo</SelectItem>
+                <SelectItem value="delivering">Em entrega</SelectItem>
+                <SelectItem value="delivered">Entregue</SelectItem>
+                <SelectItem value="canceled">Cancelado</SelectItem>
+              </SelectContent>
+            </Select>
+          )
+        }}
+      />
 
       <Button type="submit" variant="secondary" size="xs">
         <Search className="mr-2 h-4 w-4" />
