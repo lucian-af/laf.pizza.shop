@@ -33,7 +33,6 @@ namespace PizzaShop.API.Infrastructure.Repositories
 				.Include(od => od.Restaurant)
 				.Include(od => od.Customer)
 				.Include(od => od.OrderItems)
-				.ThenInclude(oi => oi.Product)
 				.Where(od => od.RestaurantId.Equals(restaurantId));
 
 			if (orderId is not null)

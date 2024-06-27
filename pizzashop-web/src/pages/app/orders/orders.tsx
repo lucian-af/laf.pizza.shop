@@ -28,7 +28,13 @@ export function Orders() {
 
   const { data: result } = useQuery({
     queryKey: ['orders', pageIndex, orderId, status, customerName],
-    queryFn: () => getOrders({ pageIndex, orderId, status, customerName }),
+    queryFn: () =>
+      getOrders({
+        pageIndex,
+        orderId,
+        customerName,
+        status: status === 'all' ? null : status,
+      }),
   })
 
   function handlePaginate(pageIndex: number) {

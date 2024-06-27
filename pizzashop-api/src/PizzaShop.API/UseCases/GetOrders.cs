@@ -22,20 +22,11 @@ namespace PizzaShop.API.UseCases
 			{
 				result.Orders.Add(new()
 				{
-					RestaurantName = order.Restaurant.Name,
 					OrderId = order.Id,
 					Status = order.Status,
 					Total = order.Total,
 					CreatedAt = order.CreatedAt,
 					CustomerName = order.Customer.Name,
-					CustomerEmail = order.Customer.Email,
-					CustomerPhone = order.Customer.Phone,
-					OrderItems = order.OrderItems.Select(oi => new GetOrdersDto.OrderItemsDetailsDto
-					{
-						Price = oi.Price,
-						Product = oi.Product.Name,
-						Quantity = oi.Quantity,
-					}).ToList()
 				});
 			}
 
