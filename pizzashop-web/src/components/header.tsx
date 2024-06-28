@@ -19,7 +19,7 @@ export function Header() {
             <span className="hidden md:flex">Início</span>
           </NavLink>
 
-          <NavLink to="/orders">
+          <NavLink to="/orders?page=1">
             <UtensilsCrossed className="h-6 w-6" />
             <span className="hidden md:flex">Pedidos</span>
           </NavLink>
