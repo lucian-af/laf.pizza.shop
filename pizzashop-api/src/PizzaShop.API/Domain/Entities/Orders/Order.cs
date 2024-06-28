@@ -33,7 +33,7 @@ namespace PizzaShop.API.Domain.Entities.Orders
 			OrderItems.Add(orderItem);
 		}
 
-		public void Aprove()
+		public void Approve()
 		{
 			if (Status != OrderStatus.Pending)
 				throw new DomainException("Order is not pending.");

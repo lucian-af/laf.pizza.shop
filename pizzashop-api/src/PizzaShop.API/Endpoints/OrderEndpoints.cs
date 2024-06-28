@@ -15,9 +15,9 @@ namespace PizzaShop.API.Endpoints
 				return Results.Ok(result.Data);
 			}).WithOpenApi();
 
-			groupBuilder.MapPatch("/orders/{orderId}/aprove", async (Guid orderId, AproveOrder aproveOrder) =>
+			groupBuilder.MapPatch("/orders/{orderId}/approve", async (Guid orderId, ApproveOrder approveOrder) =>
 			{
-				await aproveOrder.Execute(orderId);
+				await approveOrder.Execute(orderId);
 				return Results.Ok();
 			}).WithOpenApi();
 

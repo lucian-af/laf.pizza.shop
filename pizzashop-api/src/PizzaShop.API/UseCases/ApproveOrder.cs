@@ -5,7 +5,7 @@ using PizzaShop.API.Domain.Interfaces;
 
 namespace PizzaShop.API.UseCases
 {
-	public sealed class AproveOrder(IAuthenticate authenticate, IOrderRepository _orderRepository)
+	public sealed class ApproveOrder(IAuthenticate authenticate, IOrderRepository _orderRepository)
 		: UseCaseBase<Guid>(authenticate, _resturantRequired: true)
 	{
 		public override async Task Execute(Guid data)
@@ -13,7 +13,7 @@ namespace PizzaShop.API.UseCases
 			var order = await _orderRepository.GetOrderById(data, UserToken.RestaurantId.ToGuid())
 				?? throw new NullValueException("Order not found.");
 
-			order.Aprove();
+			order.Approve();
 			await _orderRepository.UnitOfWork.Commit();
 		}
 	}

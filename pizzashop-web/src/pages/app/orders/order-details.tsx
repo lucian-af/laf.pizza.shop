@@ -35,7 +35,7 @@ export function OrderDetails({
   ...props
 }: OrderDetailsProps) {
   const { data: order } = useQuery({
-    queryKey: ['order-details', orderId],
+    queryKey: ['order', orderId],
     queryFn: () => getOrderDetails(orderId),
     enabled: open,
   })
