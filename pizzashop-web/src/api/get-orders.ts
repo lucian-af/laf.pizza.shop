@@ -33,9 +33,5 @@ export async function getOrders({
     status,
   })
 
-  try {
-    return response.data
-  } catch (error) {
-    console.log(error)
-  }
+  return response.data
 }

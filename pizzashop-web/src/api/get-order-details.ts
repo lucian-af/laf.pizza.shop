@@ -21,9 +21,5 @@ export async function getOrderDetails(orderId: string) {
     `/api/v1/orders/details/${orderId}`,
   )
 
-  try {
-    return response.data
-  } catch (error) {
-    console.log(error)
-  }
+  return response.data
 }
