@@ -11,9 +11,9 @@ namespace PizzaShop.API.Configurations
 		{
 			var pizzaShopConfigs = app.Services.GetRequiredService<IOptions<PizzaShopConfigs>>();
 			app.RunMigrations(pizzaShopConfigs);
+			app.UseCors("PizzaShop");
 			app.MapAllEndpoints();
 			app.UseSwaggerCustom();
-			app.UseCors("PizzaShop");
 			app.UseStatusCodePages();
 			app.UseExceptionHandler();
 			return app;
