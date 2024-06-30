@@ -12,7 +12,6 @@ export function AppLayout() {
     const interceptorId = api.interceptors.response.use(
       (response) => response,
       (error) => {
-        console.log(error)
         if (isAxiosError(error)) {
           const status = error.response?.status
 
