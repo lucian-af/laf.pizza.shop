@@ -14,7 +14,7 @@ namespace PizzaShop.API.UseCases
 			var startDate = data.From ?? DateTime.Now.AddDays(-7);
 			var endDate = data.To ?? (data.From.HasValue ? data.From.Value.AddDays(7) : DateTime.Now);
 
-			if ((endDate - startDate).TotalDays > 7)
+			if ((int)(endDate - startDate).TotalDays > 7)
 				throw new ArgumentException("You cannot list revenue in a larger period than 7 days.");
 
 			var query = _orderRepository
@@ -32,12 +32,12 @@ namespace PizzaShop.API.UseCases
 				var monthB = Convert.ToInt32(dayWithMonthBSepareted[1]);
 
 				if (monthA == monthB)
-					return dayB - dayA;
+					return dayA - dayB;
 				else
 				{
 					var dateA = DateTime.ParseExact($"{monthA}/{dayA}", "M/d", CultureInfo.InvariantCulture);
 					var dateB = DateTime.ParseExact($"{monthB}/{dayB}", "M/d", CultureInfo.InvariantCulture);
-					return (int)(dateB - dateA).TotalMilliseconds;
+					return (int)(dateA - dateB).TotalMilliseconds;
 				}
 			});
 
