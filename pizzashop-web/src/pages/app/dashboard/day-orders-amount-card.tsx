@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@components/ui/card'
 import { useQuery } from '@tanstack/react-query'
 import { Utensils } from 'lucide-react'
 
+import { MetricCardSkeleton } from './metric-card-skeleton'
+
 export function DayOrdersAmountCard() {
   const { data: dayOrdersAmount } = useQuery({
     queryKey: ['metrics', 'day-orders-amount'],
@@ -15,25 +17,29 @@ export function DayOrdersAmountCard() {
         <Utensils className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
 
-      {dayOrdersAmount && (
-        <CardContent className="space-y-1">
-          <span className="text-2xl font-bold tracking-tight">
-            {dayOrdersAmount.amount}
-          </span>
-          <p className="text-xs text-muted-foreground">
-            {dayOrdersAmount.diffFromYesterday >= 0 ? (
-              <span className="text-emerald-500 dark:text-emerald-400">
-                +{dayOrdersAmount.diffFromYesterday}%
-              </span>
-            ) : (
-              <span className="text-rose-500 dark:text-rose-400">
-                {dayOrdersAmount.diffFromYesterday}%
-              </span>
-            )}{' '}
-            em relação à ontem
-          </p>
-        </CardContent>
-      )}
+      <CardContent className="space-y-1">
+        {dayOrdersAmount ? (
+          <>
+            <span className="text-2xl font-bold tracking-tight">
+              {dayOrdersAmount.amount}
+            </span>
+            <p className="text-xs text-muted-foreground">
+              {dayOrdersAmount.diffFromYesterday >= 0 ? (
+                <span className="text-emerald-500 dark:text-emerald-400">
+                  +{dayOrdersAmount.diffFromYesterday}%
+                </span>
+              ) : (
+                <span className="text-rose-500 dark:text-rose-400">
+                  {dayOrdersAmount.diffFromYesterday}%
+                </span>
+              )}{' '}
+              em relação à ontem
+            </p>
+          </>
+        ) : (
+          <MetricCardSkeleton />
+        )}
+      </CardContent>
     </Card>
   )
 }
