@@ -5,9 +5,23 @@ export type GetDailyRevenueInPeriodResponse = {
   revenue: number
 }[]
 
-export async function getDailyRevenueInPeriod(): Promise<GetDailyRevenueInPeriodResponse> {
+export interface GetDailyRevenueInPeriodQuery {
+  from?: Date
+  to?: Date
+}
+
+export async function getDailyRevenueInPeriod({
+  from,
+  to,
+}: GetDailyRevenueInPeriodQuery): Promise<GetDailyRevenueInPeriodResponse> {
   const response = await api.get<GetDailyRevenueInPeriodResponse>(
     'api/v1/metrics/daily-revenue-in-period',
+    {
+      params: {
+        from,
+        to,
+      },
+    },
   )
 
   return response.data
