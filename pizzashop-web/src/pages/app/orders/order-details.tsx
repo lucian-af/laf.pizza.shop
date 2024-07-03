@@ -23,6 +23,8 @@ import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { ReactNode } from 'react'
 
+import { OrderDetailsSkeleton } from './order-details-skeleton'
+
 export interface OrderDetailsProps extends DialogProps {
   children: ReactNode
   orderId: string
@@ -50,8 +52,8 @@ export function OrderDetails({
           <DialogDescription>Detalhes do pedido</DialogDescription>
         </DialogHeader>
 
-        {order && (
-          <div>
+        {order ? (
+          <div className="space-y-6">
             <Table>
               <TableBody>
                 <TableRow>
@@ -153,6 +155,8 @@ export function OrderDetails({
               </TableFooter>
             </Table>
           </div>
+        ) : (
+          <OrderDetailsSkeleton />
         )}
       </DialogContent>
     </Dialog>
