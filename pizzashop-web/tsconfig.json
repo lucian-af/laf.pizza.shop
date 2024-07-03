@@ -35,7 +35,10 @@
       "@api/*": [
         "./src/api/*"
       ]
-    }
+    },
+    "types": [
+      "vitest/globals"
+    ]
   },
   "include": [
     "src"
